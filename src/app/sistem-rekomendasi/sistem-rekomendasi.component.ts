@@ -181,7 +181,7 @@ export class SistemRekomendasiComponent implements OnInit {
           ).catch(
             (error) => {
               if (error != 0) {
-                console.log(error);
+                // console.log(error);
               }
             }
           );
@@ -223,7 +223,7 @@ export class SistemRekomendasiComponent implements OnInit {
         x["Pelayanan"] = Math.sqrt(totalPelayanan);
         x["Jarak"] = Math.sqrt(totalJarak);
 
-        console.log(x);
+        // console.log(x);
 
 
         let R: number[][] = []; // Matriks Ternomalisasi
@@ -240,7 +240,7 @@ export class SistemRekomendasiComponent implements OnInit {
             R.push(rValue);
         }
 
-        console.log(R);
+        // console.log(R);
 
         this.pembobotanMatrikNormalisasi(R);
     }
@@ -260,7 +260,7 @@ export class SistemRekomendasiComponent implements OnInit {
             Y.push(VValue);
         }
 
-        console.log(Y);
+        // console.log(Y);
 
         this.kalkulasiSolusiIdeal(Y);
     }
@@ -298,8 +298,8 @@ export class SistemRekomendasiComponent implements OnInit {
         AMin.push(Math.min(...vPelayanan)); // Pelayanan => BENEFIT
         AMin.push(Math.max(...vJarak)); // Jarak => COST
 
-        console.log(APlus);
-        console.log(AMin);
+        // console.log(APlus);
+        // console.log(AMin);
 
         this.kalkulasiJarakAlternatif(Y, APlus, AMin);
     }
@@ -313,8 +313,8 @@ export class SistemRekomendasiComponent implements OnInit {
             DMin.push(Math.sqrt(Math.pow(AMin[0] - Y[i][0], 2) + Math.pow(AMin[1] - Y[i][1], 2) + Math.pow(AMin[2] - Y[i][2], 2) + Math.pow(AMin[3] - Y[i][3], 2) + Math.pow(AMin[4] - Y[i][4], 2)));
         }
 
-        console.log(DPlus);
-        console.log(DMin);
+        // console.log(DPlus);
+        // console.log(DMin);
 
         this.kalkulasiNilaiPreferensi(DPlus, DMin);
     }
@@ -329,7 +329,7 @@ export class SistemRekomendasiComponent implements OnInit {
             })
         }
 
-        console.log(V);
+        // console.log(V);
 
         this.sortNilaiPreferensi(V);
     }
@@ -337,7 +337,7 @@ export class SistemRekomendasiComponent implements OnInit {
     sortNilaiPreferensi(V: { Nama: String, Score: number }[]) {
         this.ListSortedResult = this.mergeSort(V);
 
-        console.log(this.ListSortedResult);
+        // console.log(this.ListSortedResult);
 
         this.ChangeMenuHandler(this.ModeResult);
 
