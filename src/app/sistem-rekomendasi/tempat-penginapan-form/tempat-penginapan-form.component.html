@@ -1,0 +1,144 @@
+<form class="form form-horizontal" [formGroup]="DSSForm" #enjiForm="ngForm" novalidate (ngSubmit)="DSSForm.valid && Save()">
+    <div class="modal-header bg-dark d-flex justify-content-between align-items-center">
+        <h4 class="modal-title text-white">Tempat Penginapan</h4>
+        <button type="button" class="btn align-middle text-white" aria-label="Close" (click)="activeModal.dismiss('0')">
+            <span aria-hidden="true"><p>&times;</p></span>
+        </button>
+    </div>
+    <div class="modal-body bg-dark">
+        <div class="form-body">
+            <div class="p-3">
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Nama Tempat Penginapan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" id="nama" class="form-control input-field" placeholder="Nama Tempat Penginapan" formControlName="Nama"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && DSSForm.controls['Nama'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && DSSForm.controls['Nama'].invalid" class="invalid-feedback">
+                                    <div *ngIf="DSSForm.controls['Nama'].errors['required']">
+                                        Nama Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Harga</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="harga" class="form-control input-field" placeholder="Harga" formControlName="Harga"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && DSSForm.controls['Harga'].invalid}"
+                                [options]="{ prefix: 'Rp' }"/>
+                                <div *ngIf="enjiForm.submitted && DSSForm.controls['Harga'].invalid" class="invalid-feedback">
+                                    <div *ngIf="DSSForm.controls['Harga'].errors['required']">
+                                        Harga Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="DSSForm.controls['Harga'].errors['min'] || DSSForm.controls['Harga'].errors['max']">
+                                        Harga Penginapan harus diantara 0 dan 999,999,999,999,999.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Kebersihan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="number" id="kebersihan" class="form-control input-field" placeholder="Rating Kebersihan" formControlName="Kebersihan" (keyup)="NumberMinMaxHandler('Kebersihan')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && DSSForm.controls['Kebersihan'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && DSSForm.controls['Kebersihan'].invalid" class="invalid-feedback">
+                                    <div *ngIf="DSSForm.controls['Kebersihan'].errors['required']">
+                                        Rating Kebersihan Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="DSSForm.controls['Kebersihan'].errors['min'] || DSSForm.controls['Kebersihan'].errors['max']">
+                                        Rating Kebersihan Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Fasilitas</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="number" id="Fasilitas" class="form-control input-field" placeholder="Rating Fasilitas" formControlName="Fasilitas" (keyup)="NumberMinMaxHandler('Fasilitas')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && DSSForm.controls['Fasilitas'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && DSSForm.controls['Fasilitas'].invalid" class="invalid-feedback">
+                                    <div *ngIf="DSSForm.controls['Fasilitas'].errors['required']">
+                                        Rating Fasilitas Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="DSSForm.controls['Fasilitas'].errors['min'] || DSSForm.controls['Fasilitas'].errors['max']">
+                                        Rating Fasilitas Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Pelayanan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="number" id="Pelayanan" class="form-control input-field" placeholder="Rating Pelayanan" formControlName="Pelayanan" (keyup)="NumberMinMaxHandler('Pelayanan')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && DSSForm.controls['Pelayanan'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && DSSForm.controls['Pelayanan'].invalid" class="invalid-feedback">
+                                    <div *ngIf="DSSForm.controls['Pelayanan'].errors['required']">
+                                        Rating Pelayanan Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="DSSForm.controls['Pelayanan'].errors['min'] || DSSForm.controls['Pelayanan'].errors['max']">
+                                        Rating Pelayanan Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Jarak (Destinasi utama)</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="Jarak" class="form-control input-field" placeholder="Jarak" formControlName="Jarak"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && DSSForm.controls['Jarak'].invalid}"
+                                [options]="{ suffix: ' km', precision: 3 }"/>
+                                <div *ngIf="enjiForm.submitted && DSSForm.controls['Jarak'].invalid" class="invalid-feedback">
+                                    <div *ngIf="DSSForm.controls['Jarak'].errors['required']">
+                                        Jarak terhadap destinasi utama wajib diisi.
+                                    </div>
+                                    <div *ngIf="DSSForm.controls['Jarak'].errors['min'] || DSSForm.controls['Jarak'].errors['max']">
+                                        Jarak terhadap destinasi utama harus diantara 0 dan 999,999,999,999,999.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-dark">
+        <!-- <button type="button" class="btn btn-warning" (click)="Check()">Check</button> -->
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-floppy-fill" style="margin-right: 5px;"></i>&nbsp;<span class="button-text" translate>Save</span>
+        </button>
+    </div>
+</form>

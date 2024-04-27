@@ -1,0 +1,382 @@
+<!-- #region Navbar -->
+<nav class="navbar navbar-expand-lg navbar-expand-sm navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0">
+            <img
+                src="../../assets/images/LogoWhiteCat.png"
+                height="80"
+                alt=""
+                loading="lazy"
+            />
+        </span>
+
+        <div class="navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeMainMenu }" aria-current="page" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-fill" style="margin-right: 5px;"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSistemRekomendasi }" aria-current="page" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings" style="margin-right: 5px;"></i>Sistem Rekomendasi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSetting }" aria-current="page" (click)="ChangeMenuHandler(ModeSetting)"><i class="bi bi-gear" style="margin-right: 5px;"></i>Settings</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- #endregion -->
+
+<div id="mainMenuBG" class="bg-image">
+    <!-- #region Main Menu (DONE) -->
+    <div *ngIf="Mode == ModeMainMenu">
+        <div class="d-flex align-items-center justify-content-center p-3">
+            <!-- Carousel -->
+            <div id="carouselMainMenu" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselMainMenu" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselMainMenu" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselMainMenu" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselMainMenu" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#carouselMainMenu" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="../../assets/images/CarouselItem1.jpg" class="d-block w-100" style="height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../../assets/images/CarouselItem2.jpg" class="d-block w-100" style="height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../../assets/images/CarouselItem3.jpg" class="d-block w-100" style="height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../../assets/images/CarouselItem4.jpg" class="d-block w-100" style="height: 300px;">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../../assets/images/CarouselItem5.jpg" class="d-block w-100" style="height: 300px;">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselMainMenu" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselMainMenu" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body text-white text-bold">
+                            <img src="../../assets/images/LogoWhiteCat.png" width="300" class="img-fluid" alt="Logo">
+                            <p>Situs ini membantu merekomendasikan <b>Tempat Penginapan</b> terbaik berdasarkan informasi kriteria yang terdiri atas <b>Harga, Rating Fasilitas, Rating Kebersihan, Rating Pelayanan, dan Jarak Tempat Penginapan dengan Destinasi Utama</b> yang diberikan oleh pengguna dan bobot pertimbangan dari setiap kriteria. Mulai sistem dengan memilih <b>Sistem Rekomendasi</b>, atau <b>Setting</b> untuk mengatur bobot kriteria sesuai preferensi pengguna.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <div class="card text-center">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings" style="margin-right: 5px;"></i><b>Sistem Rekomendasi</b></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <div class="card text-center">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-dark" (click)="ChangeMenuHandler(ModeSetting)"><i class="bi bi-gear" style="margin-right: 5px;"></i><b>Settings</b></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Sistem Rekomendasi (DONE) -->
+    <div *ngIf="Mode == ModeSistemRekomendasi">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 pt-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-up-fill" style="margin-right: 5px;"></i>Kembali ke Home</button>
+                </div>
+            </div>
+            <div class="row py-3">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body text-white text-bold">
+                            <h1>Sistem Rekomendasi</h1>
+                            <p>Input tempat penginapan berdasarkan informasi kriterianya dengan menekan tombol <b>Tambah</b>. Tempat penginapan beserta informasinya dapat diubah atau dihapus oleh pengguna menggunakan tombol <b>pensil</b> atau <b>sampah</b>. Kalkulasi rekomendasi dapat dilakukan bila telah menginput minimal 2 tempat penginapan. (Nanti lanjut jelasin)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-3">
+                <div class="col-md-12 col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body text-white text-bold">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h1>Tempat Penginapan</h1>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-light" (click)="DSSHandler(DSSAdd)"><i class="bi bi-plus-circle-fill" style="margin-right: 5px;"></i><b>Tambah</b></button>
+                                    <div style="width: 10px;"></div>
+                                    <button type="button" class="btn btn-warning" (click)="DeleteAllPlace()"><i class="bi bi-x-octagon-fill" style="margin-right: 5px;"></i><b>Reset</b></button>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-dark align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Nama</th>
+                                                    <th scope="col">Harga</th>
+                                                    <th scope="col">Rating Kebersihan</th>
+                                                    <th scope="col">Rating Fasilitas</th>
+                                                    <th scope="col">Rating Pelayanan</th>
+                                                    <th scope="col">Jarak (Destinasi utama)</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of ListTempatPenginapan; let i = index">
+                                                    <td style="text-align: left !important;">{{ item.Nama }}</td>
+                                                    <td style="text-align: right !important;">Rp{{ item.Harga | currency:'':'' }}</td>
+                                                    <td>{{ item.Kebersihan }}</td>
+                                                    <td>{{ item.Fasilitas }}</td>
+                                                    <td>{{ item.Pelayanan }}</td>
+                                                    <td style="text-align: right !important;">{{ item.Jarak }} km</td>
+                                                    <td>
+                                                        <a style="margin-right: 5px;" (click)="DSSHandler(DSSEdit, i)">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <a (click)="DSSHandler(DSSDelete, i)">
+                                                            <i class="bi bi-trash-fill" style="color: red;"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="ListTempatPenginapan.length == 0">
+                                                    <td colspan="7">Belum ada Tempat Penginapan</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="ListTempatPenginapan.length > 1" class="row">
+                                <div class="col-md-12 col-sm-12 mb-3">
+                                    <div class="card text-center">
+                                        <div class="d-grid gap-2">
+                                            <button type="button" class="btn btn-success" (click)="CalculateTOPSIS()"><i class="bi bi-trophy-fill" style="margin-right: 5px;"></i><b>Calculate</b></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+    
+    <!-- #region Setting (DONE) -->
+    <div *ngIf="Mode == ModeSetting">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 pt-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-up-fill" style="margin-right: 5px;"></i>Kembali ke Home</button>
+                </div>
+            </div>
+            <div class="row py-3">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body text-white text-bold">
+                            <h1>Settings</h1>
+                            <p><b>Bobot Kriteria</b> digunakan dalam perhitungan sistem untuk memberikan rekomendasi dan telah diatur menggunakan nilai default dari sistem. Pada menu ini pengguna dapat mengatur <b>Bobot Kriteria</b> sesuai preferensi ataupun reset untuk dikembalikan ke nilai default. Nilai bobot dari setiap kriteria diatur dalam jarak <b>1 hingga 5</b>.<br><br> *Note : Nilai yang telah diatur akan tetap sesuai pengaturan sebelumnya walaupun website telah ditutup</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-3">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body text-white text-bold">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h1>Bobot Kriteria</h1>
+                                </div>
+                            </div>
+                            <div class="white-line"></div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 col-sm-4">
+                                    <h4><i class="bi bi-tags-fill" style="margin-right: 5px;"></i>Harga</h4>
+                                </div>
+                                <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
+                                    <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 0)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
+                                    <div class="text-center">
+                                        <h4>{{ currentWeight[0] }}</h4>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary rounded-circle ms-5" (click)="WeightValueHandler(WeightIncrease, 0)"><i class="bi bi-arrow-right-circle fw-bold"></i></button>
+                                </div>
+                            </div>
+                            <div class="white-line-thin"></div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 col-sm-4">
+                                    <h4><i class="bi bi-stars" style="margin-right: 5px;"></i>Kebersihan</h4>
+                                </div>
+                                <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
+                                    <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 1)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
+                                    <div class="text-center">
+                                        <h4>{{ currentWeight[1] }}</h4>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary rounded-circle ms-5" (click)="WeightValueHandler(WeightIncrease, 1)"><i class="bi bi-arrow-right-circle fw-bold"></i></button>
+                                </div>
+                            </div>
+                            <div class="white-line-thin"></div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 col-sm-4">
+                                    <h4><i class="bi bi-wrench-adjustable-circle-fill" style="margin-right: 5px;"></i>Fasilitas</h4>
+                                </div>
+                                <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
+                                    <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 2)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
+                                    <div class="text-center">
+                                        <h4>{{ currentWeight[2] }}</h4>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary rounded-circle ms-5" (click)="WeightValueHandler(WeightIncrease, 2)"><i class="bi bi-arrow-right-circle fw-bold"></i></button>
+                                </div>
+                            </div>
+                            <div class="white-line-thin"></div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 col-sm-4">
+                                    <h4><i class="bi bi-person-hearts" style="margin-right: 5px;"></i>Pelayanan</h4>
+                                </div>
+                                <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
+                                    <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 3)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
+                                    <div class="text-center">
+                                        <h4>{{ currentWeight[3] }}</h4>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary rounded-circle ms-5" (click)="WeightValueHandler(WeightIncrease, 3)"><i class="bi bi-arrow-right-circle fw-bold"></i></button>
+                                </div>
+                            </div>
+                            <div class="white-line-thin"></div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 col-sm-4">
+                                    <h4><i class="bi bi-taxi-front-fill" style="margin-right: 5px;"></i>Jarak (Destinasi Utama)</h4>
+                                </div>
+                                <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
+                                    <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 4)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
+                                    <div class="text-center">
+                                        <h4>{{ currentWeight[4] }}</h4>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary rounded-circle ms-5" (click)="WeightValueHandler(WeightIncrease, 4)"><i class="bi bi-arrow-right-circle fw-bold"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <div class="card text-center">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-warning" (click)="ResetWeightValue()"><i class="bi bi-x-octagon-fill" style="margin-right: 5px;"></i><b>Reset</b></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <div class="card text-center">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-success" (click)="SaveWeightValueSetting()"><i class="bi bi-floppy-fill" style="margin-right: 5px;"></i><b>Save</b></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Result (PROGRESS) -->
+    <div *ngIf="Mode == ModeResult">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 pt-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-up-fill" style="margin-right: 5px;"></i>Kembali ke Home</button>
+                </div>
+            </div>
+            <div class="row py-3">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body text-white text-bold">
+                            <h1>Hasil Rekomendasi</h1>
+                            <p>Berikut hasil ranking penilaian tempat penginapan beserta nilai dari masing-masing tempat penginapan. Berdasarkan hasil kalkulasi oleh sistem rekomendasi terbaik berdasarkan tempat penginapan yang diinput adalah <b>{{ ListSortedResult[0].Nama }}</b> dengan nilai <b>{{ (ListSortedResult[0].Score * 100) | currency : '':'' }}</b>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-3">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 col-sm-12">
+                    <div *ngFor="let result of ListSortedResult; let i = index">
+                        <div class="card mb-3">
+                            <div class="card-body text-white text-bold">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-3 text-center">
+                                        <h1 *ngIf="i == 0" class="gold-text">#{{ i+1 }}</h1>
+                                        <h2 *ngIf="i == 1" class="silver-text">#{{ i+1 }}</h2>
+                                        <h3 *ngIf="i == 2" class="bronze-text">#{{ i+1 }}</h3>
+                                        <h4 *ngIf="i > 2">#{{ i+1 }}</h4>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 text-center">
+                                        <h1 *ngIf="i == 0" class="gold-text">{{ result.Nama }}</h1>
+                                        <h2 *ngIf="i == 1" class="silver-text">{{ result.Nama }}</h2>
+                                        <h3 *ngIf="i == 2" class="bronze-text">{{ result.Nama }}</h3>
+                                        <h4 *ngIf="i > 2">{{ result.Nama }}</h4>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 text-center">
+                                        <h1 *ngIf="i == 0" class="gold-text">{{ (result.Score * 100) | currency : '':'' }}</h1>
+                                        <h2 *ngIf="i == 1" class="silver-text">{{ (result.Score * 100) | currency : '':'' }}</h2>
+                                        <h3 *ngIf="i == 2" class="bronze-text">{{ (result.Score * 100) | currency : '':'' }}</h3>
+                                        <h4 *ngIf="i > 2">{{ (result.Score * 100) | currency : '':'' }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+</div>
+
+<footer class="bg-dark text-center text-lg-start">
+    <!-- Copyright -->
+    <div class="text-center text-white p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2024 Copyright: Felix Nugraha
+    </div>
+    <!-- Copyright -->
+</footer>
