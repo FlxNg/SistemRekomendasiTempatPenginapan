@@ -1,0 +1,270 @@
+<form class="form form-horizontal" [formGroup]="AccomForm" #enjiForm="ngForm" novalidate (ngSubmit)="AccomForm.valid && Save()">
+    <div class="modal-header bg-dark d-flex justify-content-between align-items-center">
+        <h4 class="modal-title text-white">Tempat Penginapan</h4>
+        <button type="button" class="btn align-middle text-white" aria-label="Close" (click)="activeModal.dismiss('0')">
+            <span aria-hidden="true"><p>&times;</p></span>
+        </button>
+    </div>
+
+    <div class="modal-body bg-dark">
+        <div class="form-body">
+            <div class="p-3">
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Nama Tempat Penginapan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" id="Nama" class="form-control input-field" placeholder="Nama Tempat Penginapan" formControlName="Nama"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Nama'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Nama'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Nama'].errors['required']">
+                                        Nama Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Alamat</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" id="Alamat" class="form-control input-field" placeholder="Alamat" formControlName="Alamat"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Alamat'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Alamat'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Alamat'].errors['required']">
+                                        Alamat Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Tentang</label>
+                            </div>
+                            <div class="col-md-12">
+                                <textarea type="text" id="Tentang" class="form-control textarea-field" placeholder="Tentang" formControlName="Tentang"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Tentang'].invalid}"></textarea>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Tentang'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Tentang'].errors['required']">
+                                        Tentang Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Website</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" id="Website" class="form-control input-field" placeholder="Website" formControlName="Website"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Website'].invalid}"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Website'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Website'].errors['required']">
+                                        Website Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Daerah</label>
+                            </div>
+                            <div class="col-md-12">
+                                <select class="form-control" style="width: inherit" formControlName="Daerah"
+                                    name="selectCollateral" [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Daerah'].invalid}">
+                                    <option value="">Pilih Daerah</option>
+                                    <option *ngFor="let item of ListDaerah" [value]="item">
+                                        {{item}}
+                                    </option>
+                                </select>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Daerah'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Daerah'].errors['required']">
+                                        Daerah Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Jenis</label>
+                            </div>
+                            <div class="col-md-12">
+                                <select class="form-control" style="width: inherit" formControlName="Jenis"
+                                    name="selectCollateral" [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Jenis'].invalid}">
+                                    <option value="">Pilih Jenis Penginapan</option>
+                                    <option *ngFor="let item of ListJenis" [value]="item">
+                                        {{item}}
+                                    </option>
+                                </select>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Jenis'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Jenis'].errors['required']">
+                                        Jenis Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Harga</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="harga" class="form-control input-field" placeholder="Harga" formControlName="Harga"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Harga'].invalid}"
+                                [options]="{ prefix: 'Rp' }"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Harga'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Harga'].errors['required']">
+                                        Harga Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="AccomForm.controls['Harga'].errors['min'] || AccomForm.controls['Harga'].errors['max']">
+                                        Harga Penginapan harus diantara 0 dan 999,999,999,999,999.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Kebersihan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="kebersihan" class="form-control input-field" placeholder="Rating Kebersihan" formControlName="Kebersihan" (keyup)="NumberMinMaxHandler('Kebersihan')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Kebersihan'].invalid}"
+                                [options]="{ precision: 1 }"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Kebersihan'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Kebersihan'].errors['required']">
+                                        Rating Kebersihan Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="AccomForm.controls['Kebersihan'].errors['min'] || AccomForm.controls['Kebersihan'].errors['max']">
+                                        Rating Kebersihan Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Fasilitas</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="Fasilitas" class="form-control input-field" placeholder="Rating Fasilitas" formControlName="Fasilitas" (keyup)="NumberMinMaxHandler('Fasilitas')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Fasilitas'].invalid}"
+                                [options]="{ precision: 1 }"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Fasilitas'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Fasilitas'].errors['required']">
+                                        Rating Fasilitas Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="AccomForm.controls['Fasilitas'].errors['min'] || AccomForm.controls['Fasilitas'].errors['max']">
+                                        Rating Fasilitas Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Pelayanan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="Pelayanan" class="form-control input-field" placeholder="Rating Pelayanan" formControlName="Pelayanan" (keyup)="NumberMinMaxHandler('Pelayanan')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Pelayanan'].invalid}"
+                                [options]="{ precision: 1 }"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Pelayanan'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Pelayanan'].errors['required']">
+                                        Rating Pelayanan Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="AccomForm.controls['Pelayanan'].errors['min'] || AccomForm.controls['Pelayanan'].errors['max']">
+                                        Rating Pelayanan Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Rating Lokasi</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="Lokasi" class="form-control input-field" placeholder="Rating Lokasi" formControlName="Lokasi" (keyup)="NumberMinMaxHandler('Lokasi')"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && AccomForm.controls['Lokasi'].invalid}"
+                                [options]="{ precision: 1 }"/>
+                                <div *ngIf="enjiForm.submitted && AccomForm.controls['Lokasi'].invalid" class="invalid-feedback">
+                                    <div *ngIf="AccomForm.controls['Lokasi'].errors['required']">
+                                        Rating Lokasi Penginapan wajib diisi.
+                                    </div>
+                                    <div *ngIf="AccomForm.controls['Lokasi'].errors['min'] || AccomForm.controls['Lokasi'].errors['max']">
+                                        Rating Lokasi Penginapan harus diantara 1 dan 5.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Gambar Tempat Penginapan</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="file" id="files" accept="image/*" #uploader (change)="setDocFile($event)"/>
+                                <div *ngIf="enjiForm.submitted == true && AccomForm.controls['File64'].value == ''" class="invalid-text-color">
+                                    Gambar Wajib diupload.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="ImageUploaded == true" class="row mb-1 mt-3">
+                    <div class="col-md-12 text-center">
+                        <img [src]="ImageString" class="responsive-image" alt="Converted Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer bg-dark">
+        <button type="button" class="btn btn-warning" (click)="Check()">Check</button>
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-floppy-fill" style="margin-right: 5px;"></i>&nbsp;<span class="button-text" translate>Save</span>
+        </button>
+    </div>
+</form>

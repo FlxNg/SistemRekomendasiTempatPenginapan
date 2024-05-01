@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, QueryConstraint, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, getFirestore, query, where } from '@angular/fire/firestore';
+import { Firestore, QueryConstraint, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NGXToastrService } from '../toastr/toastr.service';
 import { CommonConstant } from '../../../shared/CommonConstant';
@@ -21,12 +21,15 @@ export class StoreService {
             let itemQuery = query(collection(this.db, "items"));
             let querySnapshot = await getDocs(itemQuery);
     
-            // let itemsDetail: any[] = 
-    
-            console.log(querySnapshot.docs.map((doc) => ({
+            let result: any[] = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
                 data: doc.data()
-            })));
+            }));
+
+            console.log({
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": result.slice()
+            });
         } catch(e) {
             console.log(e);
         }
@@ -67,16 +70,18 @@ export class StoreService {
                 data: doc.data()
             }));
 
-            let dataToReturn = CommonConstant.SuccessAPIWithData;
-
-            dataToReturn.Data = result;
-
             this.spinner.hide();
-            return dataToReturn;
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": result.slice()
+            };
         } catch(e) {
             console.log(e);
             this.spinner.hide();
-            return CommonConstant.FailedAPI;
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
         }
     }
 
@@ -91,16 +96,60 @@ export class StoreService {
                 data: doc.data()
             }));
 
-            let dataToReturn = CommonConstant.SuccessAPIWithData;
-
-            dataToReturn.Data = result;
-
             this.spinner.hide();
-            return dataToReturn;
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": result.slice()
+            };
         } catch(e) {
             console.log(e);
             this.spinner.hide();
-            return CommonConstant.FailedAPI;
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
+        }
+    }
+
+    async addTempatPenginapan(req: any) {
+        this.spinner.show();
+        try {
+            await addDoc(collection(this.db, "accomodation"), req);
+
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": []
+            };
+        } catch(e) {
+            console.log(e);
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
+        }
+    }
+
+    async editTempatPenginapan(id: string, req: any) {
+        this.spinner.show();
+        try {
+            let accomDetail = doc(this.db, "accomodation/" + id);
+
+            await updateDoc(accomDetail, req);
+
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": []
+            };
+        } catch(e) {
+            console.log(e);
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
         }
     }
 }

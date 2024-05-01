@@ -43,9 +43,9 @@ export class CommonConstant {
         Message: "Success"
     }
 
-    public static SuccessAPIWithData = {
-        StatusCode: "200",
-        Message: "Success",
-        Data: {}
-    }
+    // Daftar Daerah
+    public static ListDaerah: string[] = ["Bali", "DKI Jakarta", "Jawa Timur", "Jawa Barat", "DI Yogyakarta"];
+
+    // Daftar Tipe Tempat Penginapan
+    public static ListJenis: string[] = ["Hotel", "Villa", "Apartment"]
 }

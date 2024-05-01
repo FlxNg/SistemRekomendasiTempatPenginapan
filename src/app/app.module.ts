@@ -18,13 +18,15 @@ import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { StoreService } from './extra/firebase/StoreService.service';
 import { SistemAdminComponent } from './sistem-rekomendasi/admin/sistem-admin/sistem-admin.component';
 import { CookieService } from 'ngx-cookie-service';
+import { SistemAdminFormComponent } from './sistem-rekomendasi/admin/sistem-admin-form/sistem-admin-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SistemRekomendasiComponent,
     TempatPenginapanFormComponent,
-    SistemAdminComponent
+    SistemAdminComponent,
+    SistemAdminFormComponent
   ],
   imports: [
     BrowserModule,

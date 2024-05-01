@@ -9,6 +9,7 @@ import { CommonConstant } from '../../../../shared/CommonConstant';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
+import { SistemAdminFormComponent } from '../sistem-admin-form/sistem-admin-form.component';
 
 @Component({
   selector: 'app-sistem-admin',
@@ -22,7 +23,6 @@ export class SistemAdminComponent implements OnInit {
   IncorrectAuthentication: boolean = false;
 
   ListTempatPenginapanOriginal: any[] = [];
-
   ListTempatPenginapanForView: any[] = [];
   
   readonly ModeAdminLogin = CommonConstant.AdminLogin;
@@ -80,13 +80,16 @@ export class SistemAdminComponent implements OnInit {
   async getListTempatPenginapan() {
     let result = await this.store.getAllTempatPenginapan();
 
-    if(result.StatusCode == "500") {
-      this.toastr.errorMessage(result.Message);
+    if(result["HeaderObj"].StatusCode == "500") {
+      this.toastr.errorMessage(result["HeaderObj"].Message);
       return;
     }
     
     this.ListTempatPenginapanOriginal = result["Data"];
     this.ListTempatPenginapanForView = result["Data"];
+
+    console.log(this.ListTempatPenginapanOriginal);
+    console.log(this.ListTempatPenginapanForView);
   }
 
   async LoginAdmin() {
@@ -95,8 +98,8 @@ export class SistemAdminComponent implements OnInit {
 
     let result = await this.store.authenticateAdmin(username, password);
 
-    if(result.StatusCode == "500") {
-      this.toastr.errorMessage(result.Message);
+    if(result["HeaderObj"].StatusCode == "500") {
+      this.toastr.errorMessage(result["HeaderObj"].Message);
       return;
     }
 
@@ -110,8 +113,23 @@ export class SistemAdminComponent implements OnInit {
   }
 
 
-  TempatPenginapanHandler(mode: string, index: number = 0) {
+  TempatPenginapanHandler(Mode: string, index: string = "", data: any = null) {
+    const modalDSS = this.modalService.open(SistemAdminFormComponent, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', keyboard: false, centered: true, size: 'lg' });
+    modalDSS.componentInstance.Mode = Mode;
+    modalDSS.componentInstance.DataId = Mode == this.FormEdit ? index : "";
+    modalDSS.componentInstance.DataDetail = Mode == this.FormEdit ? data : null;
 
+    modalDSS.result.then(
+      (response) => {
+        this.getListTempatPenginapan();
+      }
+    ).catch(
+      (error) => {
+        if (error != 0) {
+          console.log(error);
+        }
+      }
+    );
   }
 
   BackToUser() {
