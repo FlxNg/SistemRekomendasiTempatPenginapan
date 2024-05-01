@@ -1,5 +1,5 @@
 <!-- #region Navbar -->
-<nav class="navbar navbar-expand-lg navbar-expand-sm navbar-expand-md navbar-dark bg-dark">
+<!-- <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <span class="navbar-brand mb-0">
             <img
@@ -16,14 +16,9 @@
                     <a class="nav-link" aria-current="page" (click)="BackToUser()"><i class="bi bi-house-fill" style="margin-right: 5px;"></i>Home</a>
                 </li>
             </ul>
-            <!-- <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeAdminLogin }" aria-current="page" (click)="ChangeMenuHandler(ModeAdminLogin)"><i class="bi bi-person-fill-gear" style="margin-right: 5px;"></i>Admin Mode</a>
-                </li>
-            </ul> -->
         </div>
     </div>
-</nav>
+</nav> -->
 <!-- #endregion -->
 
 <div id="adminMenuBG" class="bg-image">
@@ -106,6 +101,11 @@
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <tr *ngFor="let item of ListTempatPenginapanForView; let i = index">
+                                    
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -114,11 +114,3 @@
     </div>
     <!-- #endregion Admin MainMenu -->
 </div>
-
-<footer class="bg-dark text-center text-lg-start">
-    <!-- Copyright -->
-    <div class="text-center text-white p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2024 Copyright: Felix Nugraha
-    </div>
-    <!-- Copyright -->
-</footer>

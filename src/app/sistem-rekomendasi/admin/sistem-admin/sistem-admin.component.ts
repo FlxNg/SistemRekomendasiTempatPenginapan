@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NGXToastrService } from '../../../extra/toastr/toastr.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -15,8 +15,9 @@ import * as CryptoJS from 'crypto-js';
   templateUrl: './sistem-admin.component.html'
 })
 export class SistemAdminComponent implements OnInit {
-  Mode: string = CommonConstant.AdminLogin;
-
+  @Input() Mode: string = CommonConstant.AdminLogin;
+  @Output() LoginStat: EventEmitter<any> = new EventEmitter();
+ 
   AdminLoggedIn: boolean = false;
   IncorrectAuthentication: boolean = false;
 
@@ -102,6 +103,7 @@ export class SistemAdminComponent implements OnInit {
     if(result["Data"].length > 0) {
       this.cookieService.set(this.KeyAdmin, CryptoJS.SHA256("true").toString());
       this.ChangeMenuHandler(this.ModeAdminMain);
+      this.LoginStat.emit(true);
     } else {
       this.IncorrectAuthentication = true;
     }

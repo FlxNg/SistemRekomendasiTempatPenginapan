@@ -22,11 +22,14 @@
                     <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSetting }" aria-current="page" (click)="ChangeMenuHandler(ModeSetting)"><i class="bi bi-gear" style="margin-right: 5px;"></i>Settings</a>
                 </li>
             </ul>
-            <!-- <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeAdminLogin }" aria-current="page" (click)="ChangeMenuHandler(ModeAdminLogin)"><i class="bi bi-person-fill-gear" style="margin-right: 5px;"></i>Admin Mode</a>
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode.includes('Admin')}" aria-current="page" (click)="ChangeMenuHandler(ModeAdminLogin)"><i class="bi bi-person-fill-gear" style="margin-right: 5px;"></i>Admin Mode</a>
                 </li>
-            </ul> -->
+                <li *ngIf="EnableLogOut == true" class="nav-item">
+                    <a class="nav-link"  aria-current="page" (click)="AdminLogout()"><i class="bi bi-door-closed-fill" style="margin-right: 5px;"></i>Admin Logout</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
@@ -380,7 +383,7 @@
     <!-- #endregion -->
 </div>
 
-<!-- <app-sistem-admin [Mode]="Mode" *ngIf="Mode.includes('Admin') == true"></app-sistem-admin> -->
+<app-sistem-admin [Mode]="Mode" (LoginStat)="AdminLoginHandler($event)" *ngIf="Mode.includes('Admin') == true"></app-sistem-admin>
 
 <footer class="bg-dark text-center text-lg-start">
     <!-- Copyright -->

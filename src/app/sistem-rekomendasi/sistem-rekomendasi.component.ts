@@ -8,6 +8,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TempatPenginapanFormComponent } from './tempat-penginapan-form/tempat-penginapan-form.component';
 import { StoreService } from '../extra/firebase/StoreService.service';
 import { SistemAdminComponent } from './admin/sistem-admin/sistem-admin.component';
+import { CookieService } from 'ngx-cookie-service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
     selector: 'app-sistem-rekomendasi',
@@ -19,6 +21,7 @@ export class SistemRekomendasiComponent implements OnInit {
 
     UseLocalstorage: boolean = true;
     Mode: string = CommonConstant.MainMenu;
+    EnableLogOut: boolean = false;
 
     readonly ModeMainMenu = CommonConstant.MainMenu;
     readonly ModeSistemRekomendasi = CommonConstant.SistemRekomendasi;
@@ -28,6 +31,7 @@ export class SistemRekomendasiComponent implements OnInit {
 
     readonly KeyWeight = CommonConstant.KeyWeight;
     readonly KeyHistory = CommonConstant.KeyHistory;
+    readonly KeyAdmin = CommonConstant.KeyAdmin;
 
     readonly WeightIncrease = CommonConstant.INC;
     readonly WeightDecrease = CommonConstant.DCR;
@@ -52,7 +56,8 @@ export class SistemRekomendasiComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private modalService: NgbModal,
         private localStorage: LocalStorageService,
-        private store: StoreService
+        private store: StoreService,
+        private cookieService: CookieService
     ) {
         
     }
@@ -61,6 +66,7 @@ export class SistemRekomendasiComponent implements OnInit {
         // this.store.authenticateAdmin("admin", CryptoJS.SHA256("admin").toString());
 
         // this.localStorage.clearData();
+        this.EnableLogOut = false;
         this.SettingIsChanged = false;
         
         if(window.localStorage) {
@@ -89,12 +95,26 @@ export class SistemRekomendasiComponent implements OnInit {
             this.currentWeight = [1, 1, 1, 1, 1];
         }
 
+        let loginStatus = this.cookieService.get(this.KeyAdmin);
+    
+        if(loginStatus == CryptoJS.SHA256("true").toString()) {
+            this.EnableLogOut = true;
+        }
+
         this.Mode = CommonConstant.MainMenu;
     }
 
     ChangeMenuHandler(menu: string){
         if(this.Mode == menu) {
             return;
+        }
+
+        if(menu == this.ModeAdminLogin) {
+            let loginStatus = this.cookieService.get(this.KeyAdmin);
+    
+            if(loginStatus == CryptoJS.SHA256("true").toString()) {
+                this.EnableLogOut = true;
+            }
         }
 
         if(menu == this.ModeSistemRekomendasi && this.settingWeight.length == 0) {
@@ -117,6 +137,24 @@ export class SistemRekomendasiComponent implements OnInit {
         this.Mode = menu;
 
         this.SettingIsChanged = false;
+    }
+
+    AdminLoginHandler(event) {
+        if(event == true) {
+            this.EnableLogOut = true;
+        }
+    }
+
+    AdminLogout() {
+        if(confirm(CommonConstant.CONFIRM_ADMIN_LOGOUT) == true) {
+            this.cookieService.delete(this.KeyAdmin);
+    
+            this.EnableLogOut = false;
+    
+            if(this.Mode.includes("Admin") == false) {
+                this.Mode = this.ModeMainMenu;
+            }
+        }
     }
 
     WeightValueHandler(behavior: string, index: number) {

@@ -21,18 +21,6 @@ const routes: Routes = [
       },
     ]
   },
-  {
-    path: 'Admin',
-    children: [
-      {
-        path: '',
-        component: SistemAdminComponent,
-        data: {
-          title: 'Admin'
-        }
-      },
-    ]
-  },
   { path: '**', redirectTo: '' }
 ];
 

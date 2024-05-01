@@ -25,6 +25,7 @@ export class CommonConstant {
     public static CONFIRM_RESET_TEMPAT_PENGINAPAN = "Seluruh tempat penginapan yang telah diinput akan dihapus. Apakah anda yakin untuk lanjut?";
     public static CONFIRM_HAPUS_TEMPAT_PENGINAPAN = "Lanjut untuk menghapus tempat penginapan ";
     public static CONFIRM_CALCULATE_TOPSIS = "Lanjut kalkulasi rekomendasi menggunakan data yang telah diinput?"
+    public static CONFIRM_ADMIN_LOGOUT = "Konfirmasi untuk logout sebagai admin?";
 
     // Form Type Handler Mode
     public static Add = "Add";
