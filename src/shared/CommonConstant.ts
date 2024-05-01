@@ -4,10 +4,15 @@ export class CommonConstant {
     public static SistemRekomendasi = "SistemRekomendasi";
     public static Setting = "Setting";
     public static Result = "Result";
+    public static AdminLogin = "AdminLogin";
+    public static AdminMain = "AdminMain";
 
     // Localstorage Key
     public static KeyWeight = "Weight";
     public static KeyHistory = "History";
+
+    // Cookie Key
+    public static KeyAdmin = "Admin";
 
     // Weight Setting Behavior
     public static INC = "INC"; // Increase
@@ -21,8 +26,25 @@ export class CommonConstant {
     public static CONFIRM_HAPUS_TEMPAT_PENGINAPAN = "Lanjut untuk menghapus tempat penginapan ";
     public static CONFIRM_CALCULATE_TOPSIS = "Lanjut kalkulasi rekomendasi menggunakan data yang telah diinput?"
 
-    // DSS Handler Mode
+    // Form Type Handler Mode
     public static Add = "Add";
     public static Edit = "Edit";
     public static Delete = "Delete";
+
+    // Authentication
+    public static FailedAPI = {
+        StatusCode: "500",
+        Message: "Failed to hit API"
+    }
+
+    public static SuccessAPI = {
+        StatusCode: "200",
+        Message: "Success"
+    }
+
+    public static SuccessAPIWithData = {
+        StatusCode: "200",
+        Message: "Success",
+        Data: {}
+    }
 }

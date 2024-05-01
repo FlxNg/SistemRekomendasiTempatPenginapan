@@ -1,0 +1,124 @@
+<!-- #region Navbar -->
+<nav class="navbar navbar-expand-lg navbar-expand-sm navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0">
+            <img
+                src="./assets/images/LogoWhiteCat.png"
+                height="80"
+                alt=""
+                loading="lazy"
+            />
+        </span>
+
+        <div class="navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" (click)="BackToUser()"><i class="bi bi-house-fill" style="margin-right: 5px;"></i>Home</a>
+                </li>
+            </ul>
+            <!-- <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeAdminLogin }" aria-current="page" (click)="ChangeMenuHandler(ModeAdminLogin)"><i class="bi bi-person-fill-gear" style="margin-right: 5px;"></i>Admin Mode</a>
+                </li>
+            </ul> -->
+        </div>
+    </div>
+</nav>
+<!-- #endregion -->
+
+<div id="adminMenuBG" class="bg-image">
+    <!-- #region Admin Login -->
+    <div *ngIf="Mode == ModeAdminLogin">
+        <form class="form form-horizontal" [formGroup]="FormLogin" #enjiForm="ngForm" novalidate (ngSubmit)="FormLogin.valid && LoginAdmin()">
+            <div class="form-body">
+                <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+                    <div class="card bg-dark" style="width: 400px;">
+                        <div class="card-body text-white">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h3 class="card-title">Admin Login</h3>
+                                </div>
+                            </div>
+                            <div class="white-line"></div>
+                            <div class="form-group row mb-3">
+                                <div class="col-md-12 text-white text-bold">
+                                    <label class="label-field" translate>Username</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="email" id="email" class="form-control input-field" placeholder="Email" formControlName="username"
+                                    [ngClass]="{'is-invalid' : enjiForm.submitted && FormLogin.controls['username'].invalid}"/>
+                                    <div *ngIf="enjiForm.submitted && FormLogin.controls['username'].invalid" class="invalid-feedback">
+                                        <div *ngIf="FormLogin.controls['username'].errors['required']">
+                                            Username wajib diisi.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <div class="col-md-12 text-white text-bold">
+                                    <label class="label-field" translate>Password</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="password" id="password" class="form-control input-field" placeholder="Password" formControlName="password"
+                                    [ngClass]="{'is-invalid' : enjiForm.submitted && FormLogin.controls['password'].invalid}"/>
+                                    <div *ngIf="enjiForm.submitted && FormLogin.controls['password'].invalid" class="invalid-feedback">
+                                        <div *ngIf="FormLogin.controls['password'].errors['required']">
+                                            Password wajib diisi.
+                                        </div>
+                                    </div>
+                                    <div *ngIf="IncorrectAuthentication == true" class="invalid-text-color">
+                                        Username atau Password salah.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- #endregion Admin Login -->
+
+    
+    <!-- #region Admin MainMenu -->
+    <div *ngIf="Mode == ModeAdminMain">
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-md-12 pt-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-success" (click)="TempatPenginapanHandler(FormAdd)"><i class="bi bi-plus-circle-fill" style="margin-right: 5px;"></i>Tambah</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-dark align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Foto</th>
+                                    <th scope="col">Harga</th>
+                                    <th scope="col">Rating Kebersihan</th>
+                                    <th scope="col">Rating Fasilitas</th>
+                                    <th scope="col">Rating Lokasi</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion Admin MainMenu -->
+</div>
+
+<footer class="bg-dark text-center text-lg-start">
+    <!-- Copyright -->
+    <div class="text-center text-white p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2024 Copyright: Felix Nugraha
+    </div>
+    <!-- Copyright -->
+</footer>

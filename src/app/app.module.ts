@@ -12,12 +12,19 @@ import { SistemRekomendasiComponent } from './sistem-rekomendasi/sistem-rekomend
 import { TempatPenginapanFormComponent } from './sistem-rekomendasi/tempat-penginapan-form/tempat-penginapan-form.component';
 import { NgxCurrencyDirective, NgxCurrencyInputMode, provideEnvironmentNgxCurrency } from 'ngx-currency';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import { StoreService } from './extra/firebase/StoreService.service';
+import { SistemAdminComponent } from './sistem-rekomendasi/admin/sistem-admin/sistem-admin.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
     AppComponent,
     SistemRekomendasiComponent,
-    TempatPenginapanFormComponent
+    TempatPenginapanFormComponent,
+    SistemAdminComponent
   ],
   imports: [
     BrowserModule,
@@ -28,11 +35,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ToastrModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    
+    NgbModule,
+    provideFirebaseApp(() => initializeApp({"projectId":"dss-tempat-penginapan","appId":"1:483851397372:web:4e8ee966806d568b88cf79","databaseURL":"https://dss-tempat-penginapan-default-rtdb.asia-southeast1.firebasedatabase.app","storageBucket":"dss-tempat-penginapan.appspot.com","apiKey":"AIzaSyBSXduqki84tokjyKrsrJHVD2yTPeEGNwE","authDomain":"dss-tempat-penginapan.firebaseapp.com","messagingSenderId":"483851397372","measurementId":"G-G7Z8Q5XC9Y"})),
+    provideFirestore(() => getFirestore()),
+    provideFunctions(() => getFunctions())
   ],
   providers: [
     NGXToastrService,
     LocalStorageService,
+    StoreService,
+    CookieService,
     provideEnvironmentNgxCurrency({
       align: "right",
       allowNegative: false,

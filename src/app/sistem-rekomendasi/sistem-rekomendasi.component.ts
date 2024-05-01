@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NGXToastrService } from '../extra/toastr/toastr.service';
@@ -6,6 +6,8 @@ import { CommonConstant } from '../../shared/CommonConstant';
 import { LocalStorageService } from '../extra/localStorage/local-storage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TempatPenginapanFormComponent } from './tempat-penginapan-form/tempat-penginapan-form.component';
+import { StoreService } from '../extra/firebase/StoreService.service';
+import { SistemAdminComponent } from './admin/sistem-admin/sistem-admin.component';
 
 @Component({
     selector: 'app-sistem-rekomendasi',
@@ -13,12 +15,16 @@ import { TempatPenginapanFormComponent } from './tempat-penginapan-form/tempat-p
     styleUrl: './sistem-rekomendasi.component.css'
 })
 export class SistemRekomendasiComponent implements OnInit {
+    @ViewChild(SistemAdminComponent) sistemAdminComponent: SistemAdminComponent;
+
+    UseLocalstorage: boolean = true;
     Mode: string = CommonConstant.MainMenu;
 
     readonly ModeMainMenu = CommonConstant.MainMenu;
     readonly ModeSistemRekomendasi = CommonConstant.SistemRekomendasi;
     readonly ModeSetting = CommonConstant.Setting;
     readonly ModeResult = CommonConstant.Result;
+    readonly ModeAdminLogin = CommonConstant.AdminLogin;
 
     readonly KeyWeight = CommonConstant.KeyWeight;
     readonly KeyHistory = CommonConstant.KeyHistory;
@@ -29,10 +35,6 @@ export class SistemRekomendasiComponent implements OnInit {
     readonly DSSAdd = CommonConstant.Add;
     readonly DSSEdit = CommonConstant.Edit;
     readonly DSSDelete = CommonConstant.Delete;
-
-    defaultWeight: any = {
-        "Weight" : [4, 4, 3, 3, 4]
-    }
 
     settingWeight: number[] = [];
 
@@ -49,29 +51,42 @@ export class SistemRekomendasiComponent implements OnInit {
         private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private modalService: NgbModal,
-        private localStorage: LocalStorageService
+        private localStorage: LocalStorageService,
+        private store: StoreService
     ) {
         
     }
 
     ngOnInit(): void {
+        // this.store.authenticateAdmin("admin", CryptoJS.SHA256("admin").toString());
+
         // this.localStorage.clearData();
         this.SettingIsChanged = false;
-
-        let weight = this.localStorage.getData(this.KeyWeight);
-
-        if(weight == null) {
-            this.localStorage.saveData(this.KeyWeight, JSON.stringify(this.defaultWeight));
-            this.settingWeight = this.defaultWeight["Weight"];
-            this.currentWeight = this.defaultWeight["Weight"];
+        
+        if(window.localStorage) {
+            this.UseLocalstorage = true;
         } else {
-            this.settingWeight = JSON.parse(weight)["Weight"];
-            this.currentWeight = JSON.parse(weight)["Weight"];
+            this.UseLocalstorage = false;
         }
 
-        let obj = this.localStorage.getData(this.KeyHistory);
-        if(obj != null) {
-            this.ListTempatPenginapan = JSON.parse(obj)["ListTempatPenginapan"];
+        if(this.UseLocalstorage == true) {
+            let weight = this.localStorage.getData(this.KeyWeight);
+    
+            if(weight != null) {
+                this.settingWeight = JSON.parse(weight)["Weight"];
+                this.currentWeight = JSON.parse(weight)["Weight"];
+            } else {
+                this.settingWeight = [];
+                this.currentWeight = [1, 1, 1, 1, 1];
+            }
+    
+            let obj = this.localStorage.getData(this.KeyHistory);
+            if(obj != null) {
+                this.ListTempatPenginapan = JSON.parse(obj)["ListTempatPenginapan"];
+            }
+        } else {
+            this.settingWeight = [];
+            this.currentWeight = [1, 1, 1, 1, 1];
         }
 
         this.Mode = CommonConstant.MainMenu;
@@ -79,6 +94,11 @@ export class SistemRekomendasiComponent implements OnInit {
 
     ChangeMenuHandler(menu: string){
         if(this.Mode == menu) {
+            return;
+        }
+
+        if(menu == this.ModeSistemRekomendasi && this.settingWeight.length == 0) {
+            this.toastr.warningMessage("Lakukan setting bobot kriteria melalui Settings sebelum mencari rekomendasi");
             return;
         }
 
@@ -116,21 +136,23 @@ export class SistemRekomendasiComponent implements OnInit {
         
     }
 
-    ResetWeightValue() {
-        if(confirm(CommonConstant.CONFIRM_RESET)) {
-            this.currentWeight = this.defaultWeight["Weight"].slice();
+    // ResetWeightValue() {
+    //     if(confirm(CommonConstant.CONFIRM_RESET)) {
+    //         this.currentWeight = this.defaultWeight["Weight"].slice();
     
-            this.SettingIsChanged = true;
-        }
-    }
+    //         this.SettingIsChanged = true;
+    //     }
+    // }
 
     SaveWeightValueSetting() {
         if(confirm(CommonConstant.CONFIRM_SAVE)) {
-            let obj = {
-                "Weight" : this.currentWeight
+            if(this.UseLocalstorage == true) {
+                let obj = {
+                    "Weight" : this.currentWeight
+                }
+                
+                this.localStorage.saveData(this.KeyWeight, JSON.stringify(obj));
             }
-
-            this.localStorage.saveData(this.KeyWeight, JSON.stringify(obj));
 
             this.settingWeight = this.currentWeight.slice();
 
@@ -251,11 +273,11 @@ export class SistemRekomendasiComponent implements OnInit {
         for(let i = 0; i < R.length; i++) {
             let VValue : number[] = [];
 
-            VValue.push(R[i][0] * this.currentWeight[0]);
-            VValue.push(R[i][1] * this.currentWeight[1]);
-            VValue.push(R[i][2] * this.currentWeight[2]);
-            VValue.push(R[i][3] * this.currentWeight[3]);
-            VValue.push(R[i][4] * this.currentWeight[4]);
+            VValue.push(R[i][0] * this.settingWeight[0]);
+            VValue.push(R[i][1] * this.settingWeight[1]);
+            VValue.push(R[i][2] * this.settingWeight[2]);
+            VValue.push(R[i][3] * this.settingWeight[3]);
+            VValue.push(R[i][4] * this.settingWeight[4]);
 
             Y.push(VValue);
         }

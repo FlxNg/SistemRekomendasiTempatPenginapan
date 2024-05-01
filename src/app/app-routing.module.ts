@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SistemRekomendasiComponent } from './sistem-rekomendasi/sistem-rekomendasi.component';
+import { SistemAdminComponent } from './sistem-rekomendasi/admin/sistem-admin/sistem-admin.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,18 @@ const routes: Routes = [
         component: SistemRekomendasiComponent,
         data: {
           title: 'Main Menu'
+        }
+      },
+    ]
+  },
+  {
+    path: 'Admin',
+    children: [
+      {
+        path: '',
+        component: SistemAdminComponent,
+        data: {
+          title: 'Admin'
         }
       },
     ]

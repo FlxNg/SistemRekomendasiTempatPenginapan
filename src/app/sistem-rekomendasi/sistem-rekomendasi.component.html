@@ -11,7 +11,7 @@
         </span>
 
         <div class="navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeMainMenu }" aria-current="page" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-fill" style="margin-right: 5px;"></i>Home</a>
                 </li>
@@ -22,12 +22,17 @@
                     <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSetting }" aria-current="page" (click)="ChangeMenuHandler(ModeSetting)"><i class="bi bi-gear" style="margin-right: 5px;"></i>Settings</a>
                 </li>
             </ul>
+            <!-- <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeAdminLogin }" aria-current="page" (click)="ChangeMenuHandler(ModeAdminLogin)"><i class="bi bi-person-fill-gear" style="margin-right: 5px;"></i>Admin Mode</a>
+                </li>
+            </ul> -->
         </div>
     </div>
 </nav>
 <!-- #endregion -->
 
-<div id="mainMenuBG" class="bg-image">
+<div id="mainMenuBG" class="bg-image" *ngIf="Mode.includes('Admin') == false">
     <!-- #region Main Menu (DONE) -->
     <div *ngIf="Mode == ModeMainMenu">
         <div class="d-flex align-items-center justify-content-center p-3">
@@ -75,7 +80,7 @@
                     <div class="card text-center">
                         <div class="card-body text-white text-bold">
                             <img src="./assets/images/LogoWhiteCat.png" width="300" class="img-fluid" alt="Logo">
-                            <p>Situs ini membantu merekomendasikan <b>Tempat Penginapan</b> terbaik berdasarkan informasi kriteria yang terdiri atas <b>Harga, Rating Fasilitas, Rating Kebersihan, Rating Pelayanan, dan Jarak Tempat Penginapan dengan Destinasi Utama</b> yang diberikan oleh pengguna dan bobot pertimbangan dari setiap kriteria. Mulai sistem dengan memilih <b>Sistem Rekomendasi</b>, atau <b>Setting</b> untuk mengatur bobot kriteria sesuai preferensi pengguna.</p>
+                            <p>Situs ini membantu merekomendasikan <b>Tempat Penginapan</b> pada kota yang dipilih berdasarkan <b>Harga, Rating Kebersihan, Fasilitas, Pelayanan</b>, dan <b>Lokasi</b>. Mulai sistem dengan memilih <b>Sistem Rekomendasi</b>, atau <b>Setting</b> untuk mengatur bobot kriteria untuk penilaian dalam pemberian rekomendasi.</p>
                         </div>
                     </div>
                 </div>
@@ -298,13 +303,14 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-sm-12 mb-3">
+                <!-- <div class="col-md-6 col-sm-12 mb-3">
                     <div class="card text-center">
                         <div class="d-grid gap-2">
                             <button type="button" class="btn btn-warning" (click)="ResetWeightValue()"><i class="bi bi-x-octagon-fill" style="margin-right: 5px;"></i><b>Reset</b></button>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <div class="col-md-3"></div>
                 <div class="col-md-6 col-sm-12 mb-3">
                     <div class="card text-center">
                         <div class="d-grid gap-2">
@@ -373,6 +379,8 @@
     </div>
     <!-- #endregion -->
 </div>
+
+<!-- <app-sistem-admin [Mode]="Mode" *ngIf="Mode.includes('Admin') == true"></app-sistem-admin> -->
 
 <footer class="bg-dark text-center text-lg-start">
     <!-- Copyright -->

@@ -9,6 +9,15 @@
     min-height: 100vh;
 }
 
+#adminMenuBG {
+    background-image: url(../src/assets/images/AdminMenuBGDark.jpg);
+    background-size: 100%;
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0.5);
+    height: calc(100vh-56px);
+    min-height: 100vh;
+}
+
 #carouselMainMenu {
     width: 100%;
     max-width: 500px; /* Set maximum width for the carousel */
@@ -75,4 +84,11 @@ form .input-field {
 .bronze-text {
     color: #cd7f32;
     text-shadow: 0px 0px 5px rgba(205, 127, 50, 0.5);
+}
+
+.invalid-text-color {
+    width:100%;
+    margin-top:.25rem;
+    font-size:.875em;
+    color:var(--bs-form-invalid-color)
 }
