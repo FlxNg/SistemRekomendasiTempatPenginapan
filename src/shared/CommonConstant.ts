@@ -26,6 +26,8 @@ export class CommonConstant {
     public static CONFIRM_HAPUS_TEMPAT_PENGINAPAN = "Lanjut untuk menghapus tempat penginapan ";
     public static CONFIRM_CALCULATE_TOPSIS = "Lanjut kalkulasi rekomendasi menggunakan data yang telah diinput?"
     public static CONFIRM_ADMIN_LOGOUT = "Konfirmasi untuk logout sebagai admin?";
+    public static CONFIRM_ADMIN_DELETE = "Konfirmasi untuk menghapus data tempat penginapan?";
+    public static RECONFIRM_ADMIN_DELETE = "Data yang telah dihapus tidak dapat dikembalikan lagi. Yakin untuk lanjut?";
 
     // Form Type Handler Mode
     public static Add = "Add";
@@ -48,4 +50,7 @@ export class CommonConstant {
 
     // Daftar Tipe Tempat Penginapan
     public static ListJenis: string[] = ["Hotel", "Villa", "Apartment"]
+
+    // URL Google Map
+    public static MapURL = "https://maps.google.com/?q=";
 }

@@ -1,15 +1,15 @@
-import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NGXToastrService } from '../extra/toastr/toastr.service';
-import { CommonConstant } from '../../shared/CommonConstant';
-import { LocalStorageService } from '../extra/localStorage/local-storage.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TempatPenginapanFormComponent } from './tempat-penginapan-form/tempat-penginapan-form.component';
-import { StoreService } from '../extra/firebase/StoreService.service';
-import { SistemAdminComponent } from './admin/sistem-admin/sistem-admin.component';
-import { CookieService } from 'ngx-cookie-service';
 import * as CryptoJS from 'crypto-js';
+import { CookieService } from 'ngx-cookie-service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CommonConstant } from '../../shared/CommonConstant';
+import { StoreService } from '../extra/firebase/StoreService.service';
+import { LocalStorageService } from '../extra/localStorage/local-storage.service';
+import { NGXToastrService } from '../extra/toastr/toastr.service';
+import { SistemAdminComponent } from './admin/sistem-admin/sistem-admin.component';
+import { TempatPenginapanDetailComponent } from './tempat-penginapan-detail/tempat-penginapan-detail.component';
 
 @Component({
     selector: 'app-sistem-rekomendasi',
@@ -18,15 +18,14 @@ import * as CryptoJS from 'crypto-js';
 })
 export class SistemRekomendasiComponent implements OnInit {
     @ViewChild(SistemAdminComponent) sistemAdminComponent: SistemAdminComponent;
+    Mode: string = CommonConstant.MainMenu;
 
     UseLocalstorage: boolean = true;
-    Mode: string = CommonConstant.MainMenu;
     EnableLogOut: boolean = false;
 
     readonly ModeMainMenu = CommonConstant.MainMenu;
     readonly ModeSistemRekomendasi = CommonConstant.SistemRekomendasi;
     readonly ModeSetting = CommonConstant.Setting;
-    readonly ModeResult = CommonConstant.Result;
     readonly ModeAdminLogin = CommonConstant.AdminLogin;
 
     readonly KeyWeight = CommonConstant.KeyWeight;
@@ -40,16 +39,26 @@ export class SistemRekomendasiComponent implements OnInit {
     readonly DSSEdit = CommonConstant.Edit;
     readonly DSSDelete = CommonConstant.Delete;
 
+    ListDaerah: string[] = CommonConstant.ListDaerah.slice();
+    ListJenis: string[] = CommonConstant.ListJenis.slice();
+
     settingWeight: number[] = [];
 
     currentWeight: number[] = [];
 
-    ListTempatPenginapan: { Nama: string, Harga: number, Kebersihan: number, Fasilitas: number, Pelayanan: number, Jarak: number }[] = [];
+    ListTempatPenginapan: any[] = [];
 
-    ListSortedResult: { Nama: String, Score: number }[] = [];
+    ListSortedResult: { Id: string, Nama: String, data: any, Score: number }[] = [];
 
     // Flags
     SettingIsChanged: boolean = false;
+
+    UserForm = this.fb.group({
+        HargaDari: [0, [Validators.required, Validators.min(0), Validators.max(999999999999999)]],
+        HargaHingga: [999999999999999, [Validators.required, Validators.min(0), Validators.max(999999999999999)]],
+        Daerah: ["", [Validators.required]],
+        Jenis: [""]
+    });
 
     constructor(private toastr: NGXToastrService,
         private fb: FormBuilder,
@@ -63,9 +72,6 @@ export class SistemRekomendasiComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // this.store.authenticateAdmin("admin", CryptoJS.SHA256("admin").toString());
-
-        // this.localStorage.clearData();
         this.EnableLogOut = false;
         this.SettingIsChanged = false;
         
@@ -85,12 +91,21 @@ export class SistemRekomendasiComponent implements OnInit {
                 this.settingWeight = [];
                 this.currentWeight = [1, 1, 1, 1, 1];
             }
-    
-            let obj = this.localStorage.getData(this.KeyHistory);
-            if(obj != null) {
-                this.ListTempatPenginapan = JSON.parse(obj)["ListTempatPenginapan"];
+
+            let history = this.localStorage.getData(this.KeyHistory);
+
+            if(history != null) {
+                this.UserForm.patchValue({
+                    HargaDari: JSON.parse(history)["HargaDari"],
+                    HargaHingga: JSON.parse(history)["HargaHingga"],
+                    Daerah: JSON.parse(history)["Daerah"],
+                    Jenis: JSON.parse(history)["Jenis"]
+                })
+            } else {
+                this.ResetSearch();
             }
         } else {
+            this.ResetSearch();
             this.settingWeight = [];
             this.currentWeight = [1, 1, 1, 1, 1];
         }
@@ -130,10 +145,6 @@ export class SistemRekomendasiComponent implements OnInit {
             }
         }
 
-        if(menu != this.ModeResult) {
-            this.ListSortedResult = [];
-        }
-
         this.Mode = menu;
 
         this.SettingIsChanged = false;
@@ -151,7 +162,7 @@ export class SistemRekomendasiComponent implements OnInit {
     
             this.EnableLogOut = false;
     
-            if(this.Mode.includes("Admin") == false) {
+            if(this.Mode.includes("Admin") == true) {
                 this.Mode = this.ModeMainMenu;
             }
         }
@@ -174,14 +185,6 @@ export class SistemRekomendasiComponent implements OnInit {
         
     }
 
-    // ResetWeightValue() {
-    //     if(confirm(CommonConstant.CONFIRM_RESET)) {
-    //         this.currentWeight = this.defaultWeight["Weight"].slice();
-    
-    //         this.SettingIsChanged = true;
-    //     }
-    // }
-
     SaveWeightValueSetting() {
         if(confirm(CommonConstant.CONFIRM_SAVE)) {
             if(this.UseLocalstorage == true) {
@@ -200,64 +203,65 @@ export class SistemRekomendasiComponent implements OnInit {
         }
     }
 
-    DeleteAllPlace() {
-        if(this.ListTempatPenginapan.length == 0) {
+    ResetSearch() {
+        this.UserForm.reset();
+        this.UserForm.patchValue({
+            HargaDari: 0,
+            HargaHingga: 999999999999999,
+            Daerah: "",
+            Jenis: ""
+        })
+    }
+
+    async UserSearch() {
+        if(this.UserForm.get("HargaDari").value >= this.UserForm.get("HargaHingga").value) {
+            this.toastr.warningMessage("Jarak harga yang dimasukkan tidak valid");
             return;
         }
-        if(confirm(CommonConstant.CONFIRM_RESET_TEMPAT_PENGINAPAN)) {
-            this.localStorage.removeData(this.KeyHistory);
-            this.ListTempatPenginapan = [];
+        
+        let result = await this.store.getListTempatPenginapanFilteredForUser(this.UserForm.get("HargaDari").value, this.UserForm.get("HargaHingga").value, this.UserForm.get("Daerah").value, this.UserForm.get("Jenis").value);
+
+        if(result["HeaderObj"].StatusCode == "500") {
+            this.toastr.errorMessage(result["HeaderObj"].Message);
+            return;
+        }
+
+        this.ListTempatPenginapan = result["Data"].slice();
+
+        this.ListSortedResult = [];
+
+        // console.log(this.ListTempatPenginapan);
+
+        if(this.UseLocalstorage == true) {
+            let obj = {
+                HargaDari: this.UserForm.get("HargaDari").value,
+                HargaHingga: this.UserForm.get("HargaHingga").value,
+                Daerah: this.UserForm.get("Daerah").value,
+                Jenis: this.UserForm.get("Jenis").value
+            }
+
+            this.localStorage.saveData(this.KeyHistory, JSON.stringify(obj));
+        }
+
+        if(this.ListTempatPenginapan.length > 0) {
+            this.CalculateTOPSIS();
+        } else {
+            this.toastr.warningMessage("Hasil pencarian tidak ditemukan");
+            return;
         }
     }
 
-    DSSHandler(Mode: string, Index: number = -1) {
-        if(Mode == this.DSSDelete) {
-            if(confirm(CommonConstant.CONFIRM_HAPUS_TEMPAT_PENGINAPAN + this.ListTempatPenginapan[Index].Nama + "?")) {
-                this.ListTempatPenginapan.splice(Index, 1);
-                this.localStorage.saveData(this.KeyHistory, JSON.stringify({
-                    "ListTempatPenginapan": this.ListTempatPenginapan
-                }));
+    OpenDetail(i: number) {
+        // console.log(this.ListSortedResult[i]);
 
-                let obj = this.localStorage.getData(this.KeyHistory);
-                if(obj != null) {
-                  this.ListTempatPenginapan = JSON.parse(obj)["ListTempatPenginapan"];
-                }
-            }
-            return;
-        }
-
-        const modalDSS = this.modalService.open(TempatPenginapanFormComponent, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', keyboard: false, centered: true, size: 'lg' });
-        modalDSS.componentInstance.TempatPenginapan = Mode == this.DSSEdit ? this.ListTempatPenginapan[Index] : null;
-        modalDSS.componentInstance.Mode = Mode;
-        modalDSS.componentInstance.Index = Index;
-
-        modalDSS.result.then(
-            (response) => {
-                let obj = this.localStorage.getData(this.KeyHistory);
-                if(obj != null) {
-                  this.ListTempatPenginapan = JSON.parse(obj)["ListTempatPenginapan"];
-                }
-            }
-          ).catch(
-            (error) => {
-              if (error != 0) {
-                // console.log(error);
-              }
-            }
-          );
+        const modalDetail = this.modalService.open(TempatPenginapanDetailComponent, { ariaLabelledBy: 'modal-basic-title', centered: true, size: 'lg' });
+        modalDetail.componentInstance.TempatPenginapan = this.ListSortedResult[i].data;
     }
 
     //#region MCDM TOPSIS
     CalculateTOPSIS() {
-        if(this.ListTempatPenginapan.length < 2) {
-            this.toastr.warningMessage("Mohon input minimal 2 tempat penginapan");
-            return;
-        }
-        
-        if(confirm(CommonConstant.CONFIRM_CALCULATE_TOPSIS)) {
-            this.spinner.show();
-            this.matriksNormalisasi();
-        }
+        this.spinner.show();
+        this.matriksNormalisasi();
     }
 
     matriksNormalisasi() {
@@ -267,21 +271,21 @@ export class SistemRekomendasiComponent implements OnInit {
         let totalKebersihan = 0;
         let totalFasilitas = 0;
         let totalPelayanan = 0;
-        let totalJarak = 0;
+        let totalLokasi = 0;
 
         for(let i = 0; i < this.ListTempatPenginapan.length; i++) {
-            totalHarga += Math.pow(this.ListTempatPenginapan[i].Harga, 2);
-            totalKebersihan += Math.pow(this.ListTempatPenginapan[i].Kebersihan, 2);
-            totalFasilitas += Math.pow(this.ListTempatPenginapan[i].Fasilitas, 2);
-            totalPelayanan += Math.pow(this.ListTempatPenginapan[i].Pelayanan, 2);
-            totalJarak += Math.pow(this.ListTempatPenginapan[i].Jarak, 2);
+            totalHarga += Math.pow(this.ListTempatPenginapan[i].data.Harga, 2);
+            totalKebersihan += Math.pow(this.ListTempatPenginapan[i].data.Kebersihan, 2);
+            totalFasilitas += Math.pow(this.ListTempatPenginapan[i].data.Fasilitas, 2);
+            totalPelayanan += Math.pow(this.ListTempatPenginapan[i].data.Pelayanan, 2);
+            totalLokasi += Math.pow(this.ListTempatPenginapan[i].data.Lokasi, 2);
         }
 
         x["Harga"] = Math.sqrt(totalHarga);
         x["Kebersihan"] = Math.sqrt(totalKebersihan);
         x["Fasilitas"] = Math.sqrt(totalFasilitas);
         x["Pelayanan"] = Math.sqrt(totalPelayanan);
-        x["Jarak"] = Math.sqrt(totalJarak);
+        x["Lokasi"] = Math.sqrt(totalLokasi);
 
         // console.log(x);
 
@@ -291,11 +295,11 @@ export class SistemRekomendasiComponent implements OnInit {
         for(let i = 0; i < this.ListTempatPenginapan.length; i++) {
             let rValue : number[] = [];
             
-            rValue.push(this.ListTempatPenginapan[i].Harga / x["Harga"]);
-            rValue.push(this.ListTempatPenginapan[i].Kebersihan / x["Kebersihan"]);
-            rValue.push(this.ListTempatPenginapan[i].Fasilitas / x["Fasilitas"]);
-            rValue.push(this.ListTempatPenginapan[i].Pelayanan / x["Pelayanan"]);
-            rValue.push(this.ListTempatPenginapan[i].Jarak / x["Jarak"]);
+            rValue.push(this.ListTempatPenginapan[i].data.Harga / x["Harga"]);
+            rValue.push(this.ListTempatPenginapan[i].data.Kebersihan / x["Kebersihan"]);
+            rValue.push(this.ListTempatPenginapan[i].data.Fasilitas / x["Fasilitas"]);
+            rValue.push(this.ListTempatPenginapan[i].data.Pelayanan / x["Pelayanan"]);
+            rValue.push(this.ListTempatPenginapan[i].data.Lokasi / x["Lokasi"]);
 
             R.push(rValue);
         }
@@ -329,34 +333,34 @@ export class SistemRekomendasiComponent implements OnInit {
         let APlus: number[] = []; // Solusi Ideal Positif (+)
         let AMin: number[] = []; // Solusi Ideal Negatif (-)
 
-        // Kriteria Keuntungan (BENEFIT) = Kebersihan, Fasilitas, Pelayanan
-        // Kriteria Kerugian (COST) = Harga, Jarak
+        // Kriteria Keuntungan (BENEFIT) = Kebersihan, Fasilitas, Pelayanan, Lokasi
+        // Kriteria Kerugian (COST) = Harga
 
         let vHarga: number[] = [];
         let vKebersihan: number[] = [];
         let vFasilitas: number[] = [];
         let vPelayanan: number[] = [];
-        let vJarak: number[] = [];
+        let vLokasi: number[] = [];
 
         for(let i = 0; i < Y.length; i++) {
             vHarga.push(Y[i][0]);
             vKebersihan.push(Y[i][1]);
             vFasilitas.push(Y[i][2]);
             vPelayanan.push(Y[i][3]);
-            vJarak.push(Y[i][4]);
+            vLokasi.push(Y[i][4]);
         }
 
         APlus.push(Math.min(...vHarga)); // Harga => COST
         APlus.push(Math.max(...vKebersihan)); // Kebersihan => BENEFIT
         APlus.push(Math.max(...vFasilitas)); // Fasilitas => BENEFIT
         APlus.push(Math.max(...vPelayanan)); // Pelayanan => BENEFIT
-        APlus.push(Math.min(...vJarak)); // Jarak => COST
+        APlus.push(Math.max(...vLokasi)); // Lokasi => BENEFIT
 
         AMin.push(Math.max(...vHarga)); // Harga => COST
         AMin.push(Math.min(...vKebersihan)); // Kebersihan => BENEFIT
         AMin.push(Math.min(...vFasilitas)); // Fasilitas => BENEFIT
         AMin.push(Math.min(...vPelayanan)); // Pelayanan => BENEFIT
-        AMin.push(Math.max(...vJarak)); // Jarak => COST
+        AMin.push(Math.min(...vLokasi)); // Lokasi => BENEFIT
 
         // console.log(APlus);
         // console.log(AMin);
@@ -380,11 +384,13 @@ export class SistemRekomendasiComponent implements OnInit {
     }
 
     kalkulasiNilaiPreferensi(DPlus: number[], DMin: number[]) {
-        let V: { Nama: String, Score: number }[] = [];
+        let V: { Id: string, Nama: String, data: any, Score: number }[] = [];
 
         for(let i = 0; i < this.ListTempatPenginapan.length; i++) {
             V.push({
-                Nama : this.ListTempatPenginapan[i].Nama,
+                Id: this.ListTempatPenginapan[i].id,
+                Nama : this.ListTempatPenginapan[i].data.Nama,
+                data: this.ListTempatPenginapan[i].data,
                 Score : DMin[i] / (DMin[i] + DPlus[i])
             })
         }
@@ -394,12 +400,10 @@ export class SistemRekomendasiComponent implements OnInit {
         this.sortNilaiPreferensi(V);
     }
 
-    sortNilaiPreferensi(V: { Nama: String, Score: number }[]) {
+    sortNilaiPreferensi(V: { Id: string, Nama: String, data: any, Score: number }[]) {
         this.ListSortedResult = this.mergeSort(V);
 
         // console.log(this.ListSortedResult);
-
-        this.ChangeMenuHandler(this.ModeResult);
 
         this.spinner.hide();
     }
@@ -433,65 +437,5 @@ export class SistemRekomendasiComponent implements OnInit {
 
         return resultArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
     }
-
-    // MergeSort(items: { Nama: String, Score: number }[], left: number, right: number) {
-    //     if(left >= right){
-    //         return;
-    //     }
-
-    //     let mid = left + Math.floor((right - left) / 2);
-
-    //     this.MergeSort(items, left, mid);
-    //     this.MergeSort(items, mid + 1, right);
-    //     this.Merge(items, left, mid, right);
-    // }
-
-    // Merge(items: { Nama: String, Score: number }[], left: number, mid: number, right: number) {
-    //     let n1 = mid - left + 1;
-    //     let n2 = right - mid;
-
-    //     // Array Temporary
-    //     let leftItems : { Nama: String, Score: number }[] = [];
-    //     let rightItems : { Nama: String, Score: number }[] = [];
-
-    //     for(let i = 0; i < n1; i++) {
-    //         leftItems.push(items.slice()[left + i]);
-    //     }
-
-    //     for(let j = 0; j < n2; j++) {
-    //         rightItems.push(items.slice()[mid + 1 + j]);
-    //     }
-
-    //     // Index Awal untuk subarray pertama
-    //     let a = 0;
-
-    //     // Index Awal untuk subarray kedua
-    //     let b = 0;
-
-    //     // Index Awal untuk subarray ketiga
-    //     let c = left;
-
-    //     while(a < n1 && b < n2) {
-    //         if(leftItems[a].Score <= rightItems[b].Score) {
-    //             items[c] = leftItems[a];
-    //             a++;
-    //         } else {
-    //             items[c] = rightItems[b];
-    //             b++;
-    //         }
-    //     }
-
-    //     while(a < n1) {
-    //         items[c] = leftItems[a];
-    //         a++;
-    //         c++;
-    //     }
-
-    //     while(b < n2) {
-    //         items[c] = rightItems[b];
-    //         b++;
-    //         c++;
-    //     }
-    // }
     //#endregion
 }

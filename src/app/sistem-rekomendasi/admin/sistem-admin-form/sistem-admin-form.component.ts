@@ -20,7 +20,7 @@ export class SistemAdminFormComponent implements OnInit {
   readonly FormDelete = CommonConstant.Delete;
 
   ImageUploaded: boolean = false;
-  ImageData: any;
+  // ImageData: any;
   ImageString: any;
 
   ListDaerah: string[] = CommonConstant.ListDaerah.slice();
@@ -151,16 +151,16 @@ export class SistemAdminFormComponent implements OnInit {
     });
   }
 
-  base64ToImage(base64String: string): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        resolve(img);
-      };
-      img.onerror = error => reject(error);
-      img.src = base64String;
-    });
-  }
+  // base64ToImage(base64String: string): Promise<HTMLImageElement> {
+  //   return new Promise((resolve, reject) => {
+  //     const img = new Image();
+  //     img.onload = () => {
+  //       resolve(img);
+  //     };
+  //     img.onerror = error => reject(error);
+  //     img.src = base64String;
+  //   });
+  // }
 
   Check() {
     console.log(this.AccomForm);

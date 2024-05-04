@@ -10,6 +10,7 @@
 }
 
 #adminMenuBG {
+    /* background: linear-gradient(to bottom, rgb(45, 45, 45), rgb(125, 125, 125), rgb(45, 45, 45)); */
     background-image: url(../src/assets/images/AdminMenuBGDark.jpg);
     background-size: 100%;
     background-size: cover;
@@ -36,8 +37,48 @@
     object-fit: cover; /* Maintain aspect ratio */
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
+.container {
+    scrollbar-width: none;
+}
+
+.content {
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: 100vh; /* Adjust the height of the content as needed */
+}
+
 .card {
     background-color: rgba(0, 0, 0, 0.5); /* Adjust the last value (0.5) to change opacity */
+}
+
+.card-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.info-detail {
+    border: none;
+}
+
+.bi-star-fill {
+    color: gold; /* Set the color to golden */
+}
+
+.hyperlink {
+    cursor: pointer;
+    color: inherit;
+}
+
+.location {
+    color: red;
+}
+
+.globe {
+    color: blue;
 }
 
 footer {
@@ -110,7 +151,8 @@ form .textarea-field {
 }
 
 .responsive-image-table {
-    max-width: 100%;
+    max-width: none;
+    width: 300px;
     height: auto;
     display: block;
     margin: 0 auto;
@@ -123,6 +165,10 @@ form .textarea-field {
         max-width: none;
         width: 250px;
     }
+
+    .btn-fixed-size {
+        margin-top: 0px;
+    }
 }
 
   /* Media query for phones */
@@ -130,5 +176,9 @@ form .textarea-field {
     .responsive-image-table {
         max-width: none;
         width: 150px;
+    }
+
+    .btn-fixed-size {
+        margin-top: 0px;
     }
 }

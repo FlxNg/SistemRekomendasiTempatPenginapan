@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <span class="navbar-brand mb-0">
             <img
-                src="./assets/images/LogoWhiteCat.png"
+                src="./assets/images/LogoTree.png"
                 height="80"
                 alt=""
                 loading="lazy"
@@ -16,7 +16,7 @@
                     <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeMainMenu }" aria-current="page" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-fill" style="margin-right: 5px;"></i>Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSistemRekomendasi }" aria-current="page" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings" style="margin-right: 5px;"></i>Sistem Rekomendasi</a>
+                    <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSistemRekomendasi }" aria-current="page" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings" style="margin-right: 5px;"></i>Sistem Pendukung Keputusan</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" [ngClass]="{ 'active' : Mode == ModeSetting }" aria-current="page" (click)="ChangeMenuHandler(ModeSetting)"><i class="bi bi-gear" style="margin-right: 5px;"></i>Settings</a>
@@ -82,8 +82,8 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="card text-center">
                         <div class="card-body text-white text-bold">
-                            <img src="./assets/images/LogoWhiteCat.png" width="300" class="img-fluid" alt="Logo">
-                            <p>Situs ini membantu merekomendasikan <b>Tempat Penginapan</b> pada kota yang dipilih berdasarkan <b>Harga, Rating Kebersihan, Fasilitas, Pelayanan</b>, dan <b>Lokasi</b>. Mulai sistem dengan memilih <b>Sistem Rekomendasi</b>, atau <b>Setting</b> untuk mengatur bobot kriteria untuk penilaian dalam pemberian rekomendasi.</p>
+                            <img src="./assets/images/LogoTree.png" width="300" class="img-fluid" alt="Logo">
+                            <p>Situs ini membantu merekomendasikan <b>Tempat Penginapan</b> pada daerah yang dipilih berdasarkan <b>Harga, Rating Kebersihan, Rating Fasilitas, Rating Pelayanan</b>, dan <b>Rating Lokasi</b>. Mulai mencari rekomendasi dengan memilih <b>Sistem Pendukung Keputusan</b>, atau <b>Setting</b> untuk mengatur bobot kriteria untuk penilaian dalam pemberian rekomendasi.</p>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                 <div class="col-md-6 col-sm-12 mb-3">
                     <div class="card text-center">
                         <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings" style="margin-right: 5px;"></i><b>Sistem Rekomendasi</b></button>
+                            <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings" style="margin-right: 5px;"></i><b>Sistem Pendukung Keputusan</b></button>
                         </div>
                     </div>
                 </div>
@@ -109,93 +109,138 @@
     </div>
     <!-- #endregion -->
 
-    <!-- #region Sistem Rekomendasi (DONE) -->
-    <div *ngIf="Mode == ModeSistemRekomendasi">
+    <!-- #region Sistem Pendukung Keputusan (DONE) -->
+    <div class="content" *ngIf="Mode == ModeSistemRekomendasi">
         <div class="container">
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-12 pt-3 d-flex justify-content-end">
                     <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-up-fill" style="margin-right: 5px;"></i>Kembali ke Home</button>
                 </div>
             </div>
-            <div class="row py-3">
-                <div class="col-md-3"></div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="card text-center">
-                        <div class="card-body text-white text-bold">
-                            <h1>Sistem Rekomendasi</h1>
-                            <p>Input tempat penginapan berdasarkan informasi kriterianya dengan menekan tombol <b>Tambah</b>. Tempat penginapan beserta informasinya dapat diubah atau dihapus oleh pengguna menggunakan tombol <b>pensil</b> atau <b>sampah</b>, atau menghapus seluruh tempat penginapan menggunakan tombol <b>Reset</b>. Kalkulasi rekomendasi dapat dilakukan bila telah menginput minimal 2 tempat penginapan dengan menekan tombol <b>Calculate</b></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row py-3">
-                <div class="col-md-12 col-sm-12">
-                    <div class="card text-center">
-                        <div class="card-body text-white text-bold">
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <h1>Tempat Penginapan</h1>
-                                </div>
+            <form class="form form-horizontal" [formGroup]="UserForm" #enjiForm="ngForm" novalidate (ngSubmit)="UserForm.valid && UserSearch()"> 
+                <div class="row mb-3">
+                    <div class="col-md-3 pt-3">
+                        <div class="row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Harga dari</label>
                             </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex justify-content-end">
-                                    <button type="button" class="btn btn-light" (click)="DSSHandler(DSSAdd)"><i class="bi bi-plus-circle-fill" style="margin-right: 5px;"></i><b>Tambah</b></button>
-                                    <div style="width: 10px;"></div>
-                                    <button type="button" class="btn btn-warning" (click)="DeleteAllPlace()"><i class="bi bi-x-octagon-fill" style="margin-right: 5px;"></i><b>Reset</b></button>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless table-dark align-middle">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Nama</th>
-                                                    <th scope="col">Harga</th>
-                                                    <th scope="col">Rating Kebersihan</th>
-                                                    <th scope="col">Rating Fasilitas</th>
-                                                    <th scope="col">Rating Pelayanan</th>
-                                                    <th scope="col">Jarak (Destinasi utama)</th>
-                                                    <th scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let item of ListTempatPenginapan; let i = index">
-                                                    <td style="text-align: left !important;">{{ item.Nama }}</td>
-                                                    <td style="text-align: right !important;">Rp{{ item.Harga | currency:'':'' }}</td>
-                                                    <td>{{ item.Kebersihan }}</td>
-                                                    <td>{{ item.Fasilitas }}</td>
-                                                    <td>{{ item.Pelayanan }}</td>
-                                                    <td style="text-align: right !important;">{{ item.Jarak }} km</td>
-                                                    <td>
-                                                        <a style="margin-right: 5px;" (click)="DSSHandler(DSSEdit, i)">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <a (click)="DSSHandler(DSSDelete, i)">
-                                                            <i class="bi bi-trash-fill" style="color: red;"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                <tr *ngIf="ListTempatPenginapan.length == 0">
-                                                    <td colspan="7">Belum ada Tempat Penginapan</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="HargaDari" class="form-control" placeholder="Harga dari" formControlName="HargaDari"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && UserForm.controls['HargaDari'].invalid}"
+                                [options]="{ prefix: 'Rp' }"/>
+                                <div *ngIf="enjiForm.submitted && UserForm.controls['HargaDari'].invalid" class="invalid-feedback">
+                                    <div *ngIf="UserForm.controls['HargaDari'].errors['required']">
+                                        Wajib diisi.
+                                    </div>
+                                    <div *ngIf="UserForm.controls['HargaDari'].errors['min'] || UserForm.controls['HargaDari'].errors['max']">
+                                        Wajib diisi dengan nilai diantara 0 dan 999,999,999,999,999.
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt-3">
+                        <div class="row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Harga hingga</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" currencyMask id="HargaHingga" class="form-control" placeholder="Harga hingga" formControlName="HargaHingga"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && UserForm.controls['HargaHingga'].invalid}"
+                                [options]="{ prefix: 'Rp' }"/>
+                                <div *ngIf="enjiForm.submitted && UserForm.controls['HargaHingga'].invalid" class="invalid-feedback">
+                                    <div *ngIf="UserForm.controls['HargaHingga'].errors['required']">
+                                        Wajib diisi.
+                                    </div>
+                                    <div *ngIf="UserForm.controls['HargaHingga'].errors['min'] || UserForm.controls['HargaHingga'].errors['max']">
+                                        Wajib diisi dengan nilai diantara 0 dan 999,999,999,999,999.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt-3">
+                        <div class="row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Daerah</label>
+                            </div>
+                            <div class="col-md-12">
+                                <select class="form-control" style="width: inherit" formControlName="Daerah"
+                                [ngClass]="{'is-invalid' : enjiForm.submitted && UserForm.controls['Daerah'].invalid}">
+                                    <option value="">Pilih Daerah</option>
+                                    <option *ngFor="let item of ListDaerah" [value]="item">
+                                        {{item}}
+                                    </option>
+                                </select>
+                                <div *ngIf="enjiForm.submitted && UserForm.controls['Daerah'].invalid" class="invalid-feedback">
+                                    <div *ngIf="UserForm.controls['Daerah'].errors['required']">
+                                        Daerah Tempat Penginapan wajib diisi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 pt-3">
+                        <div class="row">
+                            <div class="col-md-12 text-white text-bold">
+                                <label class="label-field" translate>Jenis</label>
+                            </div>
+                            <div class="col-md-12">
+                                <select class="form-control" style="width: inherit" formControlName="Jenis">
+                                    <option value="">Semua</option>
+                                    <option *ngFor="let item of ListJenis" [value]="item">
+                                        {{item}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-3 d-flex justify-content-end">
+                        <button type="button" style="margin-right: 10px;" class="btn btn-warning" (click)="ResetSearch()"><i class="bi bi-x-circle-fill" style="margin-right: 5px;"></i>Reset</button>
+                        <button type="submit" class="btn btn-dark"><i class="bi bi-search" style="margin-right: 5px;"></i>Cari Rekomendasi</button>
+                    </div>
+                </div>
+            </form>
 
-                            <div *ngIf="ListTempatPenginapan.length > 1" class="row">
-                                <div class="col-md-12 col-sm-12 mb-3">
-                                    <div class="card text-center">
-                                        <div class="d-grid gap-2">
-                                            <button type="button" class="btn btn-success" (click)="CalculateTOPSIS()"><i class="bi bi-trophy-fill" style="margin-right: 5px;"></i><b>Calculate</b></button>
+
+            <div class="row mb-3" *ngIf="ListSortedResult.length > 0">
+                <div class="col-md-12">
+                    <div *ngFor="let item of ListSortedResult; let i = index" class="row p-3">
+                        <div class="col-md-12">
+                            <a (click)="OpenDetail(i)" class="card-link">
+                                <div class="card bg-light">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img [src]="item.data.File64" class="img-fluid rounded-start" [alt]="item.Nama" style="object-fit: cover; height: 100%;">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                            <h4 class="card-title">{{ item.Nama }}</h4>
+                                            <p class="card-text">Harga: Rp{{ item.data.Harga | currency: '':'' }}</p>
+                                            <p class="card-text">Jenis: {{ item.data.Jenis }}</p>
+                                            <p class="card-text">Alamat: {{ item.data.Alamat }}</p>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <p>Kebersihan: <i class="bi bi-star-fill" style="margin-right: 5px;"></i>{{ item.data.Kebersihan }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>Fasilitas: <i class="bi bi-star-fill" style="margin-right: 5px;"></i>{{ item.data.Fasilitas }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>Pelayanan: <i class="bi bi-star-fill" style="margin-right: 5px;"></i>{{ item.data.Pelayanan }}</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>Lokasi: <i class="bi bi-star-fill" style="margin-right: 5px;"></i>{{ item.data.Lokasi }}</p>
+                                                </div>
+                                            </div>
+                                            <p class="card-text">Score: <b>{{ (item.Score * 100) | number: '1.2-2' }}</b></p>
+                                            <p class="card-text"><small class="text-body-secondary">Click untuk melihat detail</small></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -204,7 +249,6 @@
     </div>
     <!-- #endregion -->
 
-    
     <!-- #region Setting (DONE) -->
     <div *ngIf="Mode == ModeSetting">
         <div class="container">
@@ -251,7 +295,7 @@
                             <div class="white-line-thin"></div>
                             <div class="row mb-3">
                                 <div class="col-md-4 col-sm-4">
-                                    <h4><i class="bi bi-stars" style="margin-right: 5px;"></i>Kebersihan</h4>
+                                    <h4><i class="bi bi-stars" style="margin-right: 5px;"></i>Rating Kebersihan</h4>
                                 </div>
                                 <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
                                     <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 1)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
@@ -264,7 +308,7 @@
                             <div class="white-line-thin"></div>
                             <div class="row mb-3">
                                 <div class="col-md-4 col-sm-4">
-                                    <h4><i class="bi bi-wrench-adjustable-circle-fill" style="margin-right: 5px;"></i>Fasilitas</h4>
+                                    <h4><i class="bi bi-wrench-adjustable-circle-fill" style="margin-right: 5px;"></i>Rating Fasilitas</h4>
                                 </div>
                                 <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
                                     <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 2)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
@@ -277,7 +321,7 @@
                             <div class="white-line-thin"></div>
                             <div class="row mb-3">
                                 <div class="col-md-4 col-sm-4">
-                                    <h4><i class="bi bi-person-hearts" style="margin-right: 5px;"></i>Pelayanan</h4>
+                                    <h4><i class="bi bi-person-hearts" style="margin-right: 5px;"></i>Rating Pelayanan</h4>
                                 </div>
                                 <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
                                     <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 3)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
@@ -290,7 +334,7 @@
                             <div class="white-line-thin"></div>
                             <div class="row mb-3">
                                 <div class="col-md-4 col-sm-4">
-                                    <h4><i class="bi bi-taxi-front-fill" style="margin-right: 5px;"></i>Jarak (Destinasi Utama)</h4>
+                                    <h4><i class="bi bi-geo-alt-fill" style="margin-right: 5px;"></i>Rating Lokasi</h4>
                                 </div>
                                 <div class="col-md-8 col-sm-8 d-flex justify-content-center align-items-center">
                                     <button type="button" class="btn btn-secondary rounded-circle me-5" (click)="WeightValueHandler(WeightDecrease, 4)"><i class="bi bi-arrow-left-circle fw-bold"></i></button>
@@ -318,62 +362,6 @@
                     <div class="card text-center">
                         <div class="d-grid gap-2">
                             <button type="button" class="btn btn-success" (click)="SaveWeightValueSetting()"><i class="bi bi-floppy-fill" style="margin-right: 5px;"></i><b>Save</b></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- #endregion -->
-
-    <!-- #region Result (DONE) -->
-    <div *ngIf="Mode == ModeResult">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 pt-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-dark" style="margin-right: 10px;" (click)="ChangeMenuHandler(ModeSistemRekomendasi)"><i class="bi bi-buildings-fill" style="margin-right: 5px;"></i>Kembali ke Sistem Rekomendasi</button>
-                    <button type="button" class="btn btn-light" (click)="ChangeMenuHandler(ModeMainMenu)"><i class="bi bi-house-up-fill" style="margin-right: 5px;"></i>Kembali ke Home</button>
-                </div>
-            </div>
-            <div class="row py-3">
-                <div class="col-md-3"></div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="card text-center">
-                        <div class="card-body text-white text-bold">
-                            <h1>Hasil Rekomendasi</h1>
-                            <p>Berikut hasil ranking penilaian tempat penginapan beserta nilai dari masing-masing tempat penginapan. Berdasarkan hasil kalkulasi oleh sistem rekomendasi terbaik berdasarkan tempat penginapan yang diinput adalah <b>{{ ListSortedResult[0].Nama }}</b> dengan nilai <b>{{ (ListSortedResult[0].Score * 100) | currency : '':'' }}</b>.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row py-3">
-                <div class="col-md-2"></div>
-                <div class="col-md-8 col-sm-12">
-                    <div *ngFor="let result of ListSortedResult; let i = index">
-                        <div class="card mb-3">
-                            <div class="card-body text-white text-bold">
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-3 text-center">
-                                        <h1 *ngIf="i == 0" class="gold-text">#{{ i+1 }}</h1>
-                                        <h2 *ngIf="i == 1" class="silver-text">#{{ i+1 }}</h2>
-                                        <h3 *ngIf="i == 2" class="bronze-text">#{{ i+1 }}</h3>
-                                        <h4 *ngIf="i > 2">#{{ i+1 }}</h4>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 text-center">
-                                        <h1 *ngIf="i == 0" class="gold-text">{{ result.Nama }}</h1>
-                                        <h2 *ngIf="i == 1" class="silver-text">{{ result.Nama }}</h2>
-                                        <h3 *ngIf="i == 2" class="bronze-text">{{ result.Nama }}</h3>
-                                        <h4 *ngIf="i > 2">{{ result.Nama }}</h4>
-                                    </div>
-                                    <div class="col-md-3 col-sm-3 text-center">
-                                        <h1 *ngIf="i == 0" class="gold-text">{{ (result.Score * 100) | currency : '':'' }}</h1>
-                                        <h2 *ngIf="i == 1" class="silver-text">{{ (result.Score * 100) | currency : '':'' }}</h2>
-                                        <h3 *ngIf="i == 2" class="bronze-text">{{ (result.Score * 100) | currency : '':'' }}</h3>
-                                        <h4 *ngIf="i > 2">{{ (result.Score * 100) | currency : '':'' }}</h4>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

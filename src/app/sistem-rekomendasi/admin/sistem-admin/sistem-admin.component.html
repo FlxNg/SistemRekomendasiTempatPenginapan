@@ -79,11 +79,61 @@
 
     
     <!-- #region Admin MainMenu -->
-    <div *ngIf="Mode == ModeAdminMain">
+    <div class="content" *ngIf="Mode == ModeAdminMain">
         <div class="container">
             <div class="row mb-3">
                 <div class="col-md-12 pt-3 d-flex justify-content-end">
                     <button type="button" class="btn btn-success" (click)="TempatPenginapanHandler(FormAdd)"><i class="bi bi-plus-circle-fill" style="margin-right: 5px;"></i>Tambah</button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3 pt-3">
+                    <div class="row">
+                        <div class="col-md-12 text-white text-bold">
+                            <label class="label-field" translate>Daerah</label>
+                        </div>
+                        <div class="col-md-12">
+                            <select class="form-control" style="width: inherit" [(ngModel)]="FilterDaerah">
+                                <option value="">Semua</option>
+                                <option *ngFor="let item of ListDaerah" [value]="item">
+                                    {{item}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 pt-3">
+                    <div class="row">
+                        <div class="col-md-12 text-white text-bold">
+                            <label class="label-field" translate>Jenis</label>
+                        </div>
+                        <div class="col-md-12">
+                            <select class="form-control" style="width: inherit" [(ngModel)]="FilterJenis">
+                                <option value="">Semua</option>
+                                <option *ngFor="let item of ListJenis" [value]="item">
+                                    {{item}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pt-3 mt-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-dark" (click)="FilterTempatPenginapan()"><i class="bi bi-funnel-fill" style="margin-right: 5px;"></i>Filter</button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12 d-flex justify-content">
+                    <div class="row">
+                        <div class="col-md-12 text-white text-bold">
+                            <label class="label-field" translate>Search Nama</label>
+                        </div>
+                        <div class="col-md-12 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            </div>
+                            <input type="text" id="Nama" class="form-control input-field" placeholder="Search Nama" [(ngModel)]="SearchName" (paste)="SearchNamaPenginapan()" (keydown)="SearchNamaPenginapan()" (change)="SearchNamaPenginapan()"/>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -105,7 +155,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of ListTempatPenginapanForView; let i = index">
+                                <tr *ngFor="let item of ListTempatPenginapanView; let i = index">
                                     <td style="text-align: left;">{{ item.data.Nama }}</td>
                                     <td style="text-align: center;"><img [src]="item.data.File64" class="responsive-image-table" alt="Converted Image"></td>
                                     <td style="text-align: right;">Rp{{ item.data.Harga | currency : '':'' }}</td>
@@ -119,12 +169,12 @@
                                         <a style="margin-right: 5px;" (click)="TempatPenginapanHandler(FormEdit, item.id, item.data)">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a (click)="TempatPenginapanHandler(FormDelete, item.id)">
+                                        <a (click)="DeleteTempatPenginapan(item.id)">
                                             <i class="bi bi-trash-fill" style="color: red;"></i>
                                         </a>
                                     </td>
                                 </tr>
-                                <tr *ngIf="ListTempatPenginapanForView.length == 0">
+                                <tr *ngIf="ListTempatPenginapanView.length == 0">
                                     <td colspan="10" class="text-center">No Data</td>
                                 </tr>
                             </tbody>

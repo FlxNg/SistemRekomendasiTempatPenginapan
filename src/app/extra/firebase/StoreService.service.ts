@@ -111,6 +111,72 @@ export class StoreService {
         }
     }
 
+    async getListTempatPenginapanFilteredForUser(hargaDari: number, hargaHingga: number, daerah: string, jenis: string) {
+        this.spinner.show();
+        try {
+            let itemQuery: any;
+            if(jenis.trim() == "") {
+                itemQuery = query(collection(this.db, "accomodation"), where("Harga", ">=", hargaDari), where("Harga", "<=", hargaHingga), where("Daerah", "==", daerah));
+            } else {
+                itemQuery = query(collection(this.db, "accomodation"), where("Harga", ">=", hargaDari), where("Harga", "<=", hargaHingga), where("Daerah", "==", daerah), where("Jenis", "==", jenis));
+            }
+
+            let querySnapshot = await getDocs(itemQuery);
+
+            let result: any[] = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                data: doc.data()
+            }));
+
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": result.slice()
+            };
+        } catch(e) {
+            console.log(e);
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
+        }
+    }
+
+    async getTempatPenginapanFilteredForAdmin(daerah: string, jenis: string) {
+        this.spinner.show();
+        try {
+            let itemQuery: any;
+            if(daerah.trim() != "" && jenis.trim() == "") {
+                itemQuery = query(collection(this.db, "accomodation"), where("Daerah", "==", daerah));
+            } else if(daerah.trim() == "" && jenis.trim() != "") {
+                itemQuery = query(collection(this.db, "accomodation"), where("Jenis", "==", jenis));
+            } else {
+                itemQuery = query(collection(this.db, "accomodation"), where("Daerah", "==", daerah), where("Jenis", "==", jenis));
+            }
+
+            let querySnapshot = await getDocs(itemQuery);
+
+            let result: any[] = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                data: doc.data()
+            }));
+
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": result.slice()
+            };
+        } catch(e) {
+            console.log(e);
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
+        }
+    }
+
     async addTempatPenginapan(req: any) {
         this.spinner.show();
         try {
@@ -137,6 +203,28 @@ export class StoreService {
             let accomDetail = doc(this.db, "accomodation/" + id);
 
             await updateDoc(accomDetail, req);
+
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.SuccessAPI,
+                "Data": []
+            };
+        } catch(e) {
+            console.log(e);
+            this.spinner.hide();
+            return {
+                "HeaderObj": CommonConstant.FailedAPI,
+                "Data": []
+            };
+        }
+    }
+
+    async deleteTempatPenginapan(id: string) {
+        this.spinner.show();
+        try {
+            let accomDetail = doc(this.db, "accomodation/" + id);
+
+            await deleteDoc(accomDetail);
 
             this.spinner.hide();
             return {

@@ -23,7 +23,14 @@ export class SistemAdminComponent implements OnInit {
   IncorrectAuthentication: boolean = false;
 
   ListTempatPenginapanOriginal: any[] = [];
-  ListTempatPenginapanForView: any[] = [];
+  ListTempatPenginapanView: any[] = [];
+
+  ListDaerah: string[] = CommonConstant.ListDaerah.slice();
+  ListJenis: string[] = CommonConstant.ListJenis.slice();
+
+  SearchName: string = "";
+  FilterDaerah: string = "";
+  FilterJenis: string = "";
   
   readonly ModeAdminLogin = CommonConstant.AdminLogin;
   readonly ModeAdminMain = CommonConstant.AdminMain;
@@ -60,8 +67,7 @@ export class SistemAdminComponent implements OnInit {
     let loginStatus = this.cookieService.get(this.KeyAdmin);
     
     if(loginStatus == CryptoJS.SHA256("true").toString()) {
-      this.Mode = this.ModeAdminMain;
-      this.getListTempatPenginapan();
+      this.ChangeMenuHandler(this.ModeAdminMain);
     }
   }
 
@@ -73,7 +79,7 @@ export class SistemAdminComponent implements OnInit {
     this.Mode = menu;
 
     if(this.Mode == this.ModeAdminMain) {
-      this.getListTempatPenginapan();
+      this.FilterTempatPenginapan();
     }
   }
 
@@ -85,11 +91,36 @@ export class SistemAdminComponent implements OnInit {
       return;
     }
     
-    this.ListTempatPenginapanOriginal = result["Data"];
-    this.ListTempatPenginapanForView = result["Data"];
+    this.ListTempatPenginapanOriginal = result["Data"].slice();
+    this.ListTempatPenginapanView = result["Data"].slice();
+  }
 
-    console.log(this.ListTempatPenginapanOriginal);
-    console.log(this.ListTempatPenginapanForView);
+  async FilterTempatPenginapan() {
+    this.SearchName = "";
+    if(this.FilterDaerah == "" && this.FilterJenis == "") {
+      await this.getListTempatPenginapan();
+
+      return;
+    }
+
+    let result = await this.store.getTempatPenginapanFilteredForAdmin(this.FilterDaerah, this.FilterJenis);
+
+    if(result["HeaderObj"].StatusCode == "500") {
+      this.toastr.errorMessage(result["HeaderObj"].Message);
+      return;
+    }
+
+    this.ListTempatPenginapanOriginal = result["Data"].slice();
+    this.ListTempatPenginapanView = result["Data"].slice();
+  }
+
+  SearchNamaPenginapan() {
+    if(this.SearchName.trim() == "") {
+      this.ListTempatPenginapanView = this.ListTempatPenginapanOriginal.slice();
+      return;
+    }
+
+    this.ListTempatPenginapanView = this.ListTempatPenginapanOriginal.filter(x => x.data.Nama.toLowerCase().includes(this.SearchName.trim().toLowerCase())).slice();
   }
 
   async LoginAdmin() {
@@ -112,8 +143,8 @@ export class SistemAdminComponent implements OnInit {
     }
   }
 
-
   TempatPenginapanHandler(Mode: string, index: string = "", data: any = null) {
+    
     const modalDSS = this.modalService.open(SistemAdminFormComponent, { ariaLabelledBy: 'modal-basic-title', backdrop: 'static', keyboard: false, centered: true, size: 'lg' });
     modalDSS.componentInstance.Mode = Mode;
     modalDSS.componentInstance.DataId = Mode == this.FormEdit ? index : "";
@@ -121,7 +152,7 @@ export class SistemAdminComponent implements OnInit {
 
     modalDSS.result.then(
       (response) => {
-        this.getListTempatPenginapan();
+        this.FilterTempatPenginapan();
       }
     ).catch(
       (error) => {
@@ -130,6 +161,15 @@ export class SistemAdminComponent implements OnInit {
         }
       }
     );
+  }
+
+  async DeleteTempatPenginapan(index: string = "") {
+    if(confirm(CommonConstant.CONFIRM_ADMIN_DELETE) == true) {
+      if(confirm(CommonConstant.RECONFIRM_ADMIN_DELETE) == true) {
+        await this.store.deleteTempatPenginapan(index);
+        this.FilterTempatPenginapan();
+      }
+    }
   }
 
   BackToUser() {
