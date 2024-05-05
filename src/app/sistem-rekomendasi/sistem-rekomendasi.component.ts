@@ -139,7 +139,7 @@ export class SistemRekomendasiComponent implements OnInit {
 
         if(this.SettingIsChanged == true) {
             if(confirm(CommonConstant.SETTING_CHANGED)) {
-                this.currentWeight = this.settingWeight.slice();
+                this.currentWeight = this.settingWeight.length == 5 ? this.settingWeight.slice() : [1, 1, 1, 1, 1];
             } else {
                 return;
             }
