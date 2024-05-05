@@ -40,7 +40,7 @@
                                     <label class="label-field" translate>Username</label>
                                 </div>
                                 <div class="col-md-12">
-                                    <input type="email" id="email" class="form-control input-field" placeholder="Email" formControlName="username"
+                                    <input type="text" id="Username" class="form-control input-field" placeholder="Username" formControlName="username"
                                     [ngClass]="{'is-invalid' : enjiForm.submitted && FormLogin.controls['username'].invalid}"/>
                                     <div *ngIf="enjiForm.submitted && FormLogin.controls['username'].invalid" class="invalid-feedback">
                                         <div *ngIf="FormLogin.controls['username'].errors['required']">
