@@ -17,10 +17,11 @@ import { SistemAdminFormComponent } from '../sistem-admin-form/sistem-admin-form
 })
 export class SistemAdminComponent implements OnInit {
   @Input() Mode: string = CommonConstant.AdminLogin;
+  @Input() AdminLoggedIn: boolean = false;
   @Output() LoginStat: EventEmitter<any> = new EventEmitter();
  
-  AdminLoggedIn: boolean = false;
   IncorrectAuthentication: boolean = false;
+  UseCookie: boolean = false;
 
   ListTempatPenginapanOriginal: any[] = [];
   ListTempatPenginapanView: any[] = [];
@@ -64,11 +65,19 @@ export class SistemAdminComponent implements OnInit {
       password: ""
     });
     this.IncorrectAuthentication = false;
-    let loginStatus = this.cookieService.get(this.KeyAdmin);
-    
-    if(loginStatus == CryptoJS.SHA256("true").toString()) {
+
+    this.UseCookie = navigator.cookieEnabled;
+
+    if(this.AdminLoggedIn == true) {
       this.ChangeMenuHandler(this.ModeAdminMain);
     }
+    // if(this.UseCookie == true) {
+    //   let loginStatus = this.cookieService.get(this.KeyAdmin);
+    
+    //   if(loginStatus == CryptoJS.SHA256("true").toString()) {
+    //     this.ChangeMenuHandler(this.ModeAdminMain);
+    //   }
+    // }
   }
 
   ChangeMenuHandler(menu: string) {
@@ -135,7 +144,9 @@ export class SistemAdminComponent implements OnInit {
     }
 
     if(result["Data"].length > 0) {
-      this.cookieService.set(this.KeyAdmin, CryptoJS.SHA256("true").toString());
+      if(this.UseCookie == true) {
+        this.cookieService.set(this.KeyAdmin, CryptoJS.SHA256("true").toString());
+      }
       this.ChangeMenuHandler(this.ModeAdminMain);
       this.LoginStat.emit(true);
     } else {

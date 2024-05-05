@@ -21,7 +21,9 @@ export class SistemRekomendasiComponent implements OnInit {
     Mode: string = CommonConstant.MainMenu;
 
     UseLocalstorage: boolean = true;
-    EnableLogOut: boolean = false;
+    // EnableLogOut: boolean = false;
+    AdminLoggedIn: boolean = false;
+    UseCookie: boolean = false;
 
     readonly ModeMainMenu = CommonConstant.MainMenu;
     readonly ModeSistemRekomendasi = CommonConstant.SistemRekomendasi;
@@ -72,7 +74,7 @@ export class SistemRekomendasiComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.EnableLogOut = false;
+        // this.EnableLogOut = false;
         this.SettingIsChanged = false;
         
         if(window.localStorage) {
@@ -110,10 +112,19 @@ export class SistemRekomendasiComponent implements OnInit {
             this.currentWeight = [1, 1, 1, 1, 1];
         }
 
-        let loginStatus = this.cookieService.get(this.KeyAdmin);
+        this.UseCookie = navigator.cookieEnabled;
+
+        if(this.UseCookie == true) {
+            let loginStatus = this.cookieService.get(this.KeyAdmin);
     
-        if(loginStatus == CryptoJS.SHA256("true").toString()) {
-            this.EnableLogOut = true;
+            if(loginStatus == CryptoJS.SHA256("true").toString()) {
+                this.AdminLoggedIn = true;
+                // this.EnableLogOut = true;
+            } else {
+                this.AdminLoggedIn = false
+            }
+        } else {
+            this.AdminLoggedIn = false;
         }
 
         this.Mode = CommonConstant.MainMenu;
@@ -124,13 +135,13 @@ export class SistemRekomendasiComponent implements OnInit {
             return;
         }
 
-        if(menu == this.ModeAdminLogin) {
-            let loginStatus = this.cookieService.get(this.KeyAdmin);
+        // if(menu == this.ModeAdminLogin) {
+        //     let loginStatus = this.cookieService.get(this.KeyAdmin);
     
-            if(loginStatus == CryptoJS.SHA256("true").toString()) {
-                this.EnableLogOut = true;
-            }
-        }
+        //     if(loginStatus == CryptoJS.SHA256("true").toString()) {
+        //         this.EnableLogOut = true;
+        //     }
+        // }
 
         if(menu == this.ModeSistemRekomendasi && this.settingWeight.length == 0) {
             this.toastr.warningMessage("Lakukan setting bobot kriteria melalui Settings sebelum mencari rekomendasi");
@@ -152,21 +163,22 @@ export class SistemRekomendasiComponent implements OnInit {
 
     AdminLoginHandler(event) {
         if(event == true) {
-            this.EnableLogOut = true;
+            this.AdminLoggedIn = true;
+            // this.EnableLogOut = true;
         }
     }
 
-    AdminLogout() {
-        if(confirm(CommonConstant.CONFIRM_ADMIN_LOGOUT) == true) {
-            this.cookieService.delete(this.KeyAdmin);
+    // AdminLogout() {
+    //     if(confirm(CommonConstant.CONFIRM_ADMIN_LOGOUT) == true) {
+    //         this.cookieService.delete(this.KeyAdmin);
     
-            this.EnableLogOut = false;
+    //         this.EnableLogOut = false;
     
-            if(this.Mode.includes("Admin") == true) {
-                this.Mode = this.ModeMainMenu;
-            }
-        }
-    }
+    //         if(this.Mode.includes("Admin") == true) {
+    //             this.Mode = this.ModeMainMenu;
+    //         }
+    //     }
+    // }
 
     WeightValueHandler(behavior: string, index: number) {
         let weightValue = this.currentWeight[index];
